@@ -1,0 +1,263 @@
+/* ==========================================================
+   MindSpace – Global Styles
+   Theme: Emerald Green Glassmorphism · Mint · Sage
+   ========================================================== */
+
+/* ── Google Fonts ───────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* ── Design Tokens ──────────────────────────────────────── */
+:root {
+  /* Backgrounds */
+  --bg:          #092C24;
+  --bg2:         #0d3329;
+  --panel:       #104638;
+  --panel2:      #0e3d31;
+  --panel-glass: rgba(16,70,56,.72);
+
+  /* Borders */
+  --line:        rgba(112,225,181,.14);
+  --line-bright: rgba(112,225,181,.30);
+
+  /* Text */
+  --text:        #F5FFF9;
+  --muted:       #9bbfb0;
+  --muted2:      #7aa598;
+
+  /* Accent palette */
+  --mint:        #70E1B5;
+  --mint2:       #B7F5D8;
+  --sage:        #4BAB84;
+  --emerald:     #1DB87A;
+  --lime:        #A3EFCB;
+  --warn:        #F5C842;
+  --danger:      #F4756A;
+
+  /* Shadows */
+  --shadow-sm:   0 4px 24px rgba(0,0,0,.28);
+  --shadow:      0 12px 50px rgba(0,0,0,.35);
+  --shadow-lg:   0 24px 80px rgba(0,0,0,.42);
+
+  /* Radii */
+  --r:           18px;
+  --r-sm:        12px;
+  --r-xs:        8px;
+}
+
+/* ── Reset ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html   { scroll-behavior: smooth; }
+body   {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+
+  /* Layered radial glow background */
+  background:
+    radial-gradient(ellipse at 8%  0%,  rgba(29,184,122,.22) 0%, transparent 38%),
+    radial-gradient(ellipse at 92% 10%, rgba(112,225,181,.12) 0%, transparent 32%),
+    radial-gradient(ellipse at 50% 90%, rgba(75,171,132,.10) 0%, transparent 40%),
+    var(--bg);
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; border: none; background: none; }
+img    { max-width: 100%; display: block; }
+a      { color: inherit; text-decoration: none; }
+
+/* ── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--sage); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--mint); }
+
+/* ── Utility classes ─────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(90deg, #70E1B5 0%, #B7F5D8 55%, #A3EFCB 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Glass card */
+.glass {
+  background: linear-gradient(145deg, rgba(16,70,56,.80), rgba(9,44,36,.88));
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--shadow);
+}
+.glass-bright {
+  background: linear-gradient(145deg, rgba(16,70,56,.90), rgba(9,44,36,.95));
+  border: 1px solid var(--line-bright);
+  border-radius: var(--r);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 0 0 1px rgba(112,225,181,.08), var(--shadow);
+}
+
+/* Glow helpers */
+.glow-mint    { box-shadow: 0 0 24px rgba(112,225,181,.4); }
+.glow-emerald { box-shadow: 0 0 24px rgba(29,184,122,.4); }
+
+/* Section eyebrow */
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.2px;
+  text-transform: uppercase;
+  color: var(--mint);
+}
+
+/* ── Animations ──────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-13px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 25px rgba(112,225,181,.35), 0 0 60px rgba(29,184,122,.18); }
+  50%       { box-shadow: 0 0 48px rgba(112,225,181,.60), 0 0 110px rgba(29,184,122,.30); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes orbit1 {
+  from { transform: rotate(0deg) translateX(80px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(80px) rotate(-360deg); }
+}
+@keyframes orbit2 {
+  from { transform: rotate(180deg) translateX(55px) rotate(-180deg); }
+  to   { transform: rotate(540deg) translateX(55px) rotate(-540deg); }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: scale(.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmerGreen {
+  0%   { background-position: -300px 0; }
+  100% { background-position: 300px 0; }
+}
+@keyframes borderPulseGreen {
+  0%,100% { border-color: rgba(112,225,181,.22); }
+  50%      { border-color: rgba(112,225,181,.60); }
+}
+@keyframes bgMove {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 24px;
+  border-radius: var(--r-sm);
+  font-weight: 700;
+  font-size: 14px;
+  color: #082820;
+  background: linear-gradient(110deg, #70E1B5, #1DB87A);
+  box-shadow: 0 6px 24px rgba(29,184,122,.40);
+  transition: all .22s ease;
+  white-space: nowrap;
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(29,184,122,.55);
+  background: linear-gradient(110deg, #8BEBC5, #26D48C);
+}
+.btn-primary:active:not(:disabled) { transform: translateY(0); }
+.btn-primary:disabled { opacity: .55; cursor: not-allowed; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 20px;
+  border-radius: var(--r-sm);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--mint);
+  border: 1px solid var(--line-bright);
+  background: rgba(112,225,181,.07);
+  transition: all .22s ease;
+  white-space: nowrap;
+}
+.btn-secondary:hover {
+  border-color: var(--mint);
+  color: var(--text);
+  background: rgba(112,225,181,.14);
+  box-shadow: 0 0 18px rgba(112,225,181,.18);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  transition: color .2s;
+}
+.btn-ghost:hover { color: var(--mint); }
+
+/* ── Spinners ─────────────────────────────────────────────── */
+.spinner {
+  width: 42px; height: 42px;
+  border: 3px solid rgba(112,225,181,.18);
+  border-top-color: var(--mint);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+.spinner-sm {
+  width: 18px; height: 18px;
+  border-width: 2px;
+  border-color: rgba(8,40,32,.4);
+  border-top-color: #082820;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  display: inline-block;
+}
+
+/* ── Campus-style decorative backgrounds ─────────────────── */
+/* Used as section-level overlays via inline style + these pseudo-patterns */
+.bg-campus {
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(29,184,122,.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(112,225,181,.08) 0%, transparent 45%),
+    linear-gradient(180deg, var(--bg) 0%, #0a2f27 100%);
+}
+.bg-study {
+  background:
+    radial-gradient(ellipse at 10% 80%, rgba(75,171,132,.15) 0%, transparent 45%),
+    radial-gradient(ellipse at 90% 10%, rgba(29,184,122,.10) 0%, transparent 40%),
+    linear-gradient(135deg, #0a2f27 0%, var(--bg) 100%);
+}
+.bg-nature {
+  background:
+    radial-gradient(ellipse at 50% 0%,  rgba(163,239,203,.10) 0%, transparent 55%),
+    radial-gradient(ellipse at 0%  100%,rgba(29,184,122,.12) 0%, transparent 50%),
+    var(--bg);
+}
+/* Grid/notebook pattern overlay for minimal academic feel */
+.bg-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(112,225,181,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(112,225,181,.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  border-radius: inherit;
+}

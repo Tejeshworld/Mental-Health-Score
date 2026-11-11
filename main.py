@@ -9,7 +9,25 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import database as db
 
-model = joblib.load('Mental_Health_Model.pkl')
+# ── Load Machine Learning Model ────────────────────────────────────────────────
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "Mental_Health_Model.pkl")
+
+if not os.path.isfile(MODEL_PATH):
+    raise FileNotFoundError(
+        f"Critical Startup Error: Model file not found at '{MODEL_PATH}'. "
+        "Please ensure 'Mental_Health_Model.pkl' is uploaded to the root directory."
+    )
+
+try:
+    model = joblib.load(MODEL_PATH)
+except Exception as exc:
+    raise RuntimeError(
+        f"Critical Startup Error: Failed to unpickle 'Mental_Health_Model.pkl' from '{MODEL_PATH}'. "
+        f"Cause: {exc}. "
+        "Ensure scikit-learn==1.6.1 and Python 3.11 are used for binary compatibility."
+    ) from exc
+
 top_countries = ['Other','India', 'USA', 'Canada', 'Australia', 'UK', 'Germany', 'Mexico', 'Turkey', 'France']
 
 app = FastAPI(title="MindSpace API", version="1.0.0")
@@ -269,3 +287,9 @@ if os.path.isdir(STATIC_DIR):
         if os.path.isfile(index):
             return FileResponse(index, media_type="text/html")
         return {"error": "Frontend not built. Run: cd frontend2 && npm run build"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)

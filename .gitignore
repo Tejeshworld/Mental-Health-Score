@@ -1,0 +1,20 @@
+# Environments & Dependencies
+.venv/
+venv/
+env/
+ENV/
+frontend2/node_modules/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary & OS files
+.DS_Store
+Thumbs.db
+*.tmp
+
+# SQLite journal
+*.db-journal
+

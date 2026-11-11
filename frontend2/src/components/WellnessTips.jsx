@@ -156,7 +156,7 @@ function TipCard({ tip }) {
 export default function WellnessTips() {
   return (
     <section className="bg-study" style={{
-      padding: '30px 5% 70px',
+      padding: '30px clamp(12px, 4vw, 5%) 70px',
       maxWidth: 1300,
       margin: '0 auto',
       position: 'relative',
@@ -199,7 +199,7 @@ export default function WellnessTips() {
         {/* 6 Grid Cards */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
           gap: 20,
           marginBottom: 34,
         }}>
@@ -210,7 +210,7 @@ export default function WellnessTips() {
         <div className="glass" style={{
           maxWidth: 860,
           margin: '0 auto',
-          padding: '20px 24px',
+          padding: 'clamp(16px, 3vw, 20px) clamp(14px, 4vw, 24px)',
           borderRadius: 16,
           border: '1px solid rgba(112,225,181,.26)',
           background: 'rgba(16,70,56,.65)',

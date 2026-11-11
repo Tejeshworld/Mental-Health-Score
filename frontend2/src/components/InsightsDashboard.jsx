@@ -122,7 +122,7 @@ export default function InsightsDashboard({ formData, score, onStartAssessment }
   if (!formData) {
     return (
       <section className="bg-campus" style={{
-        padding: '20px 5% 70px',
+        padding: '20px clamp(12px, 4vw, 5%) 70px',
         maxWidth: 1300,
         margin: '0 auto',
         position: 'relative',
@@ -213,7 +213,7 @@ export default function InsightsDashboard({ formData, score, onStartAssessment }
 
   return (
     <section className="bg-campus" style={{
-      padding: '20px 5% 70px',
+      padding: '20px clamp(12px, 4vw, 5%) 70px',
       maxWidth: 1300,
       margin: '0 auto',
       position: 'relative',
@@ -256,7 +256,7 @@ export default function InsightsDashboard({ formData, score, onStartAssessment }
         {/* 5 Metric cards */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 190px), 1fr))',
           gap: 16,
           marginBottom: 30,
         }}>
@@ -306,19 +306,16 @@ export default function InsightsDashboard({ formData, score, onStartAssessment }
         </div>
 
         {/* Charts Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-          gap: 22,
-          marginBottom: 24,
-        }}>
+        <div className="charts-grid" style={{ marginBottom: 24 }}>
           {/* Daily Time Distribution Bar Chart */}
-          <div className="glass-bright" style={{ padding: 24 }}>
+          <div className="glass-bright" style={{ padding: 'clamp(14px, 3vw, 24px)' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               marginBottom: 20,
+              gap: 8,
+              flexWrap: 'wrap',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                 <span style={{ color: 'var(--mint)', fontSize: 18 }}><FiBarChart2 /></span>
@@ -361,12 +358,14 @@ export default function InsightsDashboard({ formData, score, onStartAssessment }
           </div>
 
           {/* Lifestyle Balance Radar Chart */}
-          <div className="glass-bright" style={{ padding: 24 }}>
+          <div className="glass-bright" style={{ padding: 'clamp(14px, 3vw, 24px)' }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               marginBottom: 20,
+              gap: 8,
+              flexWrap: 'wrap',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                 <span style={{ color: 'var(--mint)', fontSize: 18 }}><FiPieChart /></span>
@@ -387,9 +386,9 @@ export default function InsightsDashboard({ formData, score, onStartAssessment }
             </div>
 
             <ResponsiveContainer width="100%" height={230}>
-              <RadarChart data={radarData} margin={{ top: 0, right: 30, bottom: 0, left: 30 }}>
+              <RadarChart data={radarData} margin={{ top: 0, right: 15, bottom: 0, left: 15 }}>
                 <PolarGrid stroke="rgba(112,225,181,.16)" />
-                <PolarAngleAxis dataKey="subject" tick={{ fill: '#9bbfb0', fontSize: 11 }} />
+                <PolarAngleAxis dataKey="subject" tick={{ fill: '#9bbfb0', fontSize: 10 }} />
                 <Radar
                   name="Student Routine"
                   dataKey="A"

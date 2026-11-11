@@ -7,18 +7,12 @@ export default function Footer({ onNavigate }) {
   return (
     <footer style={{
       borderTop: '1px solid rgba(112,225,181,.14)',
-      padding: '48px 5% 32px',
+      padding: '48px clamp(12px, 4vw, 5%) 32px',
       background: 'linear-gradient(180deg, rgba(9,44,36,.60) 0%, rgba(9,44,36,.98) 100%)',
       position: 'relative',
     }}>
       <div style={{ maxWidth: 1300, margin: '0 auto' }}>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'auto 1fr auto',
-          gap: 32,
-          alignItems: 'start',
-          flexWrap: 'wrap',
-        }}>
+        <div className="footer-grid">
           {/* Brand Column */}
           <div>
             <button
@@ -76,10 +70,9 @@ export default function Footer({ onNavigate }) {
           {/* Navigation Links */}
           <nav style={{
             display: 'flex',
-            gap: 24,
+            gap: 20,
             flexWrap: 'wrap',
             paddingTop: 8,
-            justifyContent: 'center',
           }}>
             {[
               { label: 'Home', key: 'home' },
@@ -119,7 +112,7 @@ export default function Footer({ onNavigate }) {
           </nav>
 
           {/* Badges Column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-end' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div style={{
               display: 'flex',
               alignItems: 'center',

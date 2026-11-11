@@ -49,7 +49,7 @@ export default function Navbar({ onNavigate, currentUser, activeView, onSignOut 
         top: 0, left: 0, right: 0,
         zIndex:     999,
         height:     70,
-        padding:    '0 5%',
+        padding:    '0 clamp(12px, 4vw, 5%)',
         display:    'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -93,7 +93,7 @@ export default function Navbar({ onNavigate, currentUser, activeView, onSignOut 
           {/* Brand text */}
           <span style={{ lineHeight: 1 }}>
             <div style={{
-              font: "700 21px 'Space Grotesk'",
+              font: "700 clamp(18px, 4vw, 21px) 'Space Grotesk'",
               letterSpacing: '-0.4px',
               color: '#F5FFF9',
               textShadow: '0 0 20px rgba(112,225,181,.35)',

@@ -175,7 +175,7 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '40px 5% 60px',
+      padding: '40px clamp(12px, 4vw, 5%) 60px',
       position: 'relative',
     }}>
       {/* Background grid */}
@@ -192,7 +192,7 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
       <div className="glass-bright" style={{
         width: '100%',
         maxWidth: 580,
-        padding: '36px 32px',
+        padding: 'clamp(24px, 5vw, 36px) clamp(16px, 4vw, 32px)',
         position: 'relative',
         zIndex: 1,
         border: '1px solid rgba(112,225,181,.28)',
@@ -317,8 +317,8 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
             </div>
           </div>
 
-          {/* 2. Student Age & 4. Class / Academic Year in a 2-col layout */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: 12 }}>
+          {/* 2. Student Age & 4. Class / Academic Year in a responsive layout */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: 12 }}>
             {/* 2. Student Age */}
             <div>
               <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: '#cce8de', marginBottom: 5 }}>

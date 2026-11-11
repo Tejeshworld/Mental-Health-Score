@@ -151,7 +151,7 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
 
   return (
     <section className="bg-nature" style={{
-      padding: '10px 5% 60px',
+      padding: '10px clamp(12px, 4vw, 5%) 60px',
       maxWidth: 1300,
       margin: '0 auto',
       position: 'relative',
@@ -185,16 +185,13 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
           </p>
         </div>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0,1.9fr) minmax(0,1.1fr)',
-          gap: 24,
+        <div className="prediction-grid" style={{
           maxWidth: 1040,
           margin: '0 auto',
         }}>
           {/* Main result glass card */}
           <div className="glass-bright" style={{
-            padding: 32,
+            padding: 'clamp(18px, 4vw, 32px)',
             position: 'relative',
             overflow: 'hidden',
             border: '1px solid rgba(112,225,181,.28)',
@@ -250,7 +247,7 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
             </div>
 
             <h3 style={{
-              font: "700 24px 'Space Grotesk'",
+              font: "700 clamp(20px, 3vw, 24px) 'Space Grotesk'",
               color: 'var(--text)',
               marginBottom: 8,
             }}>
@@ -274,7 +271,7 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
               flexWrap: 'wrap',
             }}>
               <ScoreRing score={numericScore} />
-              <div style={{ flex: 1, minWidth: 210 }}>
+              <div style={{ flex: 1, minWidth: 'min(100%, 200px)' }}>
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -301,7 +298,7 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
             {/* Quick stats row */}
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 120px), 1fr))',
               gap: 12,
               marginBottom: 26,
             }}>
@@ -337,7 +334,7 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
           {/* Assessment summary sidebar */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             <div className="glass" style={{
-              padding: 24,
+              padding: 'clamp(16px, 3.5vw, 24px)',
               border: '1px solid rgba(112,225,181,.18)',
               animation: 'fadeSlideUp .5s ease both',
             }}>

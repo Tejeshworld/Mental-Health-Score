@@ -204,7 +204,7 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
   const pct = Math.round(((step + 1) / STEPS.length) * 100)
 
   return (
-    <section className="bg-study" style={{ padding:'20px 5% 70px', maxWidth:1300, margin:'0 auto', position:'relative' }}>
+    <section className="bg-study" style={{ padding:'20px clamp(12px, 4vw, 5%) 70px', maxWidth:1300, margin:'0 auto', position:'relative' }}>
 
       {/* Grid overlay */}
       <div style={{
@@ -231,8 +231,8 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
           </p>
         </div>
 
-        {/* Step indicators */}
-        <div style={{ maxWidth:680, margin:'0 auto 32px', display:'flex', alignItems:'center', gap:8 }}>
+        {/* Step indicators - Desktop */}
+        <div className="stepper-desktop" style={{ maxWidth:680, margin:'0 auto 32px', alignItems:'center', gap:8 }}>
           {STEPS.map(({ key, label, Icon }, i) => (
             <div key={key} style={{ display:'flex', alignItems:'center', gap:8, flex: i < 2 ? 1 : 'none' }}>
               <div style={{
@@ -260,6 +260,36 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
               )}
             </div>
           ))}
+        </div>
+
+        {/* Step indicators - Mobile */}
+        <div className="stepper-mobile" style={{
+          maxWidth: 460, margin: '0 auto 24px', flexDirection: 'column', gap: 10,
+          background: 'rgba(16,70,56,.45)', border: '1px solid rgba(112,225,181,.15)',
+          borderRadius: 14, padding: '12px 16px',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#B7F5D8', display: 'flex', alignItems: 'center', gap: 6 }}>
+              {(() => {
+                const ActiveIcon = STEPS[step].Icon
+                return <ActiveIcon size={15} style={{ color: '#70E1B5' }} />
+              })()}
+              Step {step + 1} of {STEPS.length}: {STEPS[step].label}
+            </span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#70E1B5' }}>{pct}%</span>
+          </div>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            {STEPS.map((s, idx) => (
+              <div
+                key={s.key}
+                style={{
+                  flex: 1, height: 6, borderRadius: 99,
+                  background: idx <= step ? 'linear-gradient(90deg,#1DB87A,#70E1B5)' : 'rgba(112,225,181,.12)',
+                  transition: 'background .3s',
+                }}
+              />
+            ))}
+          </div>
         </div>
 
         {/* Form glass card */}
@@ -299,12 +329,12 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
 
           {/* Fields */}
           <form onSubmit={handleSubmit}>
-            <div style={{ padding:'28px 28px 12px' }}>
+            <div style={{ padding:'clamp(16px, 4vw, 28px) clamp(16px, 4vw, 28px) 12px' }}>
 
               {/* Step 0 – Personal Info */}
               {step === 0 && (
                 <div style={{ animation:'fadeSlideUp .3s ease both' }}>
-                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:'20px 22px' }}>
+                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%, 200px), 1fr))', gap:'20px 22px' }}>
                     <div>
                       <TextField label="Age" hint="10 – 100" name="age" value={form.age} min={10} max={100} onChange={change} />
                       {errors.age && <ErrMsg msg={errors.age} />}
@@ -328,7 +358,7 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
               {/* Step 1 – Digital Behaviour */}
               {step === 1 && (
                 <div style={{ animation:'fadeSlideUp .3s ease both' }}>
-                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:'20px 22px', marginBottom:24 }}>
+                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%, 200px), 1fr))', gap:'20px 22px', marginBottom:24 }}>
                     <div>
                       <SelectField label="Most Used Platform" hint="Primary social app" name="most_used_platform" value={form.most_used_platform} options={PLATFORMS} onChange={change} />
                       {errors.most_used_platform && <ErrMsg msg={errors.most_used_platform} />}
@@ -338,7 +368,7 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
                       {errors.purpose_of_use && <ErrMsg msg={errors.purpose_of_use} />}
                     </div>
                   </div>
-                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:'20px 24px' }}>
+                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%, 240px), 1fr))', gap:'20px 24px' }}>
                     <div>
                       <SliderField label="Avg Daily Usage Hours" hint="Social media time" name="avg_daily_usage_hours" value={form.avg_daily_usage_hours} min={0} max={12} step={0.5} unit="h" onChange={change} />
                     </div>
@@ -358,7 +388,7 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
               {/* Step 2 – Lifestyle */}
               {step === 2 && (
                 <div style={{ animation:'fadeSlideUp .3s ease both' }}>
-                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(260px,1fr))', gap:'20px 24px' }}>
+                  <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%, 240px), 1fr))', gap:'20px 24px' }}>
                     <div>
                       <SliderField label="Study Hours Per Day" hint="Academic study time" name="study_hours" value={form.study_hours} min={0} max={16} step={0.5} unit="h" onChange={change} />
                     </div>
@@ -380,7 +410,7 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
             {/* API error */}
             {apiError && (
               <div style={{
-                margin:'0 28px 12px', padding:'13px 16px', borderRadius:12,
+                margin:'0 clamp(16px, 4vw, 28px) 12px', padding:'13px 16px', borderRadius:12,
                 background:'rgba(244,117,106,.08)', border:'1px solid rgba(244,117,106,.35)',
                 color:'#F4A49E', fontSize:13, display:'flex', alignItems:'flex-start', gap:9,
               }}>
@@ -394,29 +424,33 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
 
             {/* Nav buttons */}
             <div style={{
-              padding:'16px 28px 24px',
-              display:'flex',
-              justifyContent: step > 0 ? 'space-between' : 'flex-end',
-              alignItems:'center', gap:12,
+              padding:'16px clamp(16px, 4vw, 28px) 24px',
               borderTop:'1px solid rgba(112,225,181,.10)',
             }}>
-              {step > 0 && (
-                <button type="button" className="btn-secondary" onClick={prevStep}>
-                  <FiChevronLeft size={15} /> Back
-                </button>
-              )}
-              {step < STEPS.length - 1 ? (
-                <button type="button" className="btn-primary" onClick={nextStep}>
-                  Continue <FiArrowRight />
-                </button>
-              ) : (
-                <button type="submit" className="btn-primary" disabled={loading} style={{ minWidth:210 }}>
-                  {loading
-                    ? <><span className="spinner-sm" /> Analysing your data…</>
-                    : <><LuBrain size={16} /> Predict My Wellbeing</>
-                  }
-                </button>
-              )}
+              <div className="assessment-nav-group" style={{
+                justifyContent: step > 0 ? 'space-between' : 'flex-end',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+              }}>
+                {step > 0 && (
+                  <button type="button" className="btn-secondary" onClick={prevStep}>
+                    <FiChevronLeft size={15} /> Back
+                  </button>
+                )}
+                {step < STEPS.length - 1 ? (
+                  <button type="button" className="btn-primary" onClick={nextStep}>
+                    Continue <FiArrowRight />
+                  </button>
+                ) : (
+                  <button type="submit" className="btn-primary" disabled={loading} style={{ minWidth:210 }}>
+                    {loading
+                      ? <><span className="spinner-sm" /> Analysing your data…</>
+                      : <><LuBrain size={16} /> Predict My Wellbeing</>
+                    }
+                  </button>
+                )}
+              </div>
             </div>
 
             {step === STEPS.length - 1 && (

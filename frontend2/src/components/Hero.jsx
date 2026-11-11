@@ -12,7 +12,7 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
   return (
     <section className="bg-campus" style={{
       position: 'relative',
-      padding: '70px 5% 60px',
+      padding: 'clamp(36px, 6vw, 70px) clamp(12px, 4vw, 5%) 60px',
       maxWidth: 1300,
       margin: '0 auto',
       overflow: 'hidden',
@@ -43,11 +43,8 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
         filter: 'blur(50px)', pointerEvents: 'none',
       }} />
 
-      <div style={{
+      <div className="hero-grid" style={{
         position: 'relative', zIndex: 1,
-        display: 'grid',
-        gridTemplateColumns: '1fr auto',
-        gap: 50, alignItems: 'center',
       }}>
 
         {/* ── Text side ─────────────────────────────────── */}
@@ -61,8 +58,8 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
 
           {/* Headline */}
           <h1 style={{
-            font: "700 clamp(38px,5.2vw,68px)/1.05 'Space Grotesk'",
-            letterSpacing: '-2.5px',
+            font: "700 clamp(32px,5.2vw,68px)/1.05 'Space Grotesk'",
+            letterSpacing: '-2px',
             marginBottom: 20,
             maxWidth: 760,
             color: 'var(--text)',
@@ -75,7 +72,7 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
           {/* Description */}
           <p style={{
             color: 'var(--muted)',
-            fontSize: 'clamp(15px,1.5vw,17px)',
+            fontSize: 'clamp(14.5px,1.5vw,17px)',
             lineHeight: 1.80,
             maxWidth: 580,
             marginBottom: 34,
@@ -86,7 +83,7 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
           </p>
 
           {/* CTA buttons */}
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 44 }}>
+          <div className="hero-ctas" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 44 }}>
             <button
               className="btn-primary"
               onClick={onStart}
@@ -142,7 +139,7 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
           </div>
 
           {/* Feature chips */}
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <div className="hero-chips" style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             {FEATURES.map(({ Icon, color, label, desc }) => (
               <div key={label} style={{
                 display: 'flex', alignItems: 'center', gap: 9,

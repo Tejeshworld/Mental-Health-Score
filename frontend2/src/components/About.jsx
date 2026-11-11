@@ -8,7 +8,7 @@ export default function About({ onNavigate }) {
   return (
     <section className="bg-campus" style={{
       minHeight: 'calc(100vh - 140px)',
-      padding: '40px 5% 80px',
+      padding: '40px clamp(12px, 4vw, 5%) 80px',
       maxWidth: 1200,
       margin: '0 auto',
       position: 'relative',
@@ -71,12 +71,12 @@ export default function About({ onNavigate }) {
         {/* 1. Purpose & Awareness Grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
           gap: 24,
           marginBottom: 40,
         }}>
           {/* Purpose of the Platform */}
-          <div className="glass-bright" style={{ padding: 32, borderRadius: 16 }}>
+          <div className="glass-bright" style={{ padding: 'clamp(20px, 4vw, 32px)', borderRadius: 16 }}>
             <div style={{
               width: 48, height: 48,
               borderRadius: 14,
@@ -98,7 +98,7 @@ export default function About({ onNavigate }) {
           </div>
 
           {/* Mental Wellbeing Awareness */}
-          <div className="glass-bright" style={{ padding: 32, borderRadius: 16 }}>
+          <div className="glass-bright" style={{ padding: 'clamp(20px, 4vw, 32px)', borderRadius: 16 }}>
             <div style={{
               width: 48, height: 48,
               borderRadius: 14,
@@ -179,7 +179,7 @@ export default function About({ onNavigate }) {
         </div>
 
         {/* 3. How the AI-Powered Wellbeing Platform Works */}
-        <div className="glass-bright" style={{ padding: '36px 32px', borderRadius: 18, marginBottom: 40 }}>
+        <div className="glass-bright" style={{ padding: 'clamp(24px, 4vw, 36px) clamp(16px, 4vw, 32px)', borderRadius: 18, marginBottom: 40 }}>
           <div style={{ textAlign: 'center', marginBottom: 32 }}>
             <div className="section-eyebrow" style={{ justifyContent: 'center', marginBottom: 10 }}>
               <FiCpu size={13} /> Architecture

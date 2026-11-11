@@ -116,7 +116,7 @@ export default function ForgotPassword({ onNavigate }) {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '40px 5% 60px',
+      padding: '40px clamp(12px, 4vw, 5%) 60px',
       position: 'relative',
     }}>
       {/* Background grid */}
@@ -133,7 +133,7 @@ export default function ForgotPassword({ onNavigate }) {
       <div className="glass-bright" style={{
         width: '100%',
         maxWidth: 480,
-        padding: '38px 32px',
+        padding: 'clamp(24px, 5vw, 38px) clamp(16px, 4vw, 32px)',
         position: 'relative',
         zIndex: 1,
         border: '1px solid rgba(112,225,181,.28)',

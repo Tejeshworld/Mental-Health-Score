@@ -302,7 +302,7 @@ export default function App() {
       )}
 
       {/* ── View Router ────────────────────────────────────────────────────── */}
-      <main style={{ flex: 1 }}>
+      <main style={{ flex: 1, paddingTop: 70 }}>
         {activeView === 'signin' && (
           <SignIn
             onNavigate={handleNavigate}

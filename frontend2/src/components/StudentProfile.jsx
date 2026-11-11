@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fi'
 import { LuBrain, LuGraduationCap } from 'react-icons/lu'
 import { ACADEMIC_CLASSES } from './SignUp.jsx'
+import API_URL from '../apiConfig.js'
 
 export default function StudentProfile({ user, token, onSignOut, onStartAssessment, onUpdateUser }) {
   const [profile, setProfile] = useState(user)
@@ -29,7 +30,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
     let isMounted = true
     const fetchProfile = async () => {
       try {
-        const res = await fetch('http://127.0.0.1:8000/auth/profile', {
+        const res = await fetch(`${API_URL}/auth/profile`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -113,7 +114,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
     }
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/auth/profile', {
+      const res = await fetch(`${API_URL}/auth/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +142,11 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
       setSuccessMsg('Profile changes saved successfully!')
       setTimeout(() => setSuccessMsg(null), 3500)
     } catch (err) {
-      setError(err.message)
+      if (err.name === 'TypeError') {
+        setError('Cannot connect to the server. Please check your connection or wait a moment for the instance to awaken.')
+      } else {
+        setError(err.message)
+      }
     } finally {
       setSaveLoading(false)
     }

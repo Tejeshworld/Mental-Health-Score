@@ -1,12 +1,15 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
+const targetUrl = process.env.VITE_API_URL || 'https://mental-health-score-tejesh-kanta.onrender.com'
+
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/predict': 'http://127.0.0.1:8000',
-      '/api':     'http://127.0.0.1:8000',
+      '/predict': targetUrl,
+      '/api':     targetUrl,
+      '/auth':    targetUrl,
     },
   },
   build: {

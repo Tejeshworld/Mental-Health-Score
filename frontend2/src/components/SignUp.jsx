@@ -5,6 +5,7 @@ import {
   FiArrowRight, FiAlertCircle, FiCheck, FiChevronDown
 } from 'react-icons/fi'
 import { LuBrain, LuGraduationCap } from 'react-icons/lu'
+import API_URL from '../apiConfig.js'
 
 export const ACADEMIC_CLASSES = [
   'Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5',
@@ -111,7 +112,7 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
 
     setLoading(true)
     try {
-      const res = await fetch('http://127.0.0.1:8000/auth/signup', {
+      const res = await fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -136,7 +137,11 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
         onNavigate('/signin', { registeredEmail: formData.email.trim() })
       }, 1600)
     } catch (err) {
-      setError(err.message)
+      if (err.name === 'TypeError') {
+        setError('Unable to reach the server. Please check your connection or wait a moment for the instance to awaken.')
+      } else {
+        setError(err.message)
+      }
     } finally {
       setLoading(false)
     }

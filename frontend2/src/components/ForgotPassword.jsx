@@ -4,6 +4,7 @@ import {
   FiArrowRight, FiAlertCircle, FiCheck, FiInfo, FiArrowLeft
 } from 'react-icons/fi'
 import { LuBrain } from 'react-icons/lu'
+import API_URL from '../apiConfig.js'
 
 export default function ForgotPassword({ onNavigate }) {
   const [step, setStep] = useState(1) // 1: Request token, 2: Reset with token
@@ -29,7 +30,7 @@ export default function ForgotPassword({ onNavigate }) {
 
     setLoading(true)
     try {
-      const res = await fetch('http://127.0.0.1:8000/auth/forgot-password', {
+      const res = await fetch(`${API_URL}/auth/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: email.trim() }),
@@ -73,7 +74,7 @@ export default function ForgotPassword({ onNavigate }) {
 
     setLoading(true)
     try {
-      const res = await fetch('http://127.0.0.1:8000/auth/reset-password', {
+      const res = await fetch(`${API_URL}/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

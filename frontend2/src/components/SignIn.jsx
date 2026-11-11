@@ -4,6 +4,7 @@ import {
   FiArrowRight, FiAlertCircle, FiCheck, FiUserPlus
 } from 'react-icons/fi'
 import { LuBrain } from 'react-icons/lu'
+import API_URL from '../apiConfig.js'
 
 export default function SignIn({ onNavigate, onAuthSuccess, initialEmail }) {
   const [formData, setFormData] = useState({
@@ -57,7 +58,7 @@ export default function SignIn({ onNavigate, onAuthSuccess, initialEmail }) {
 
     setLoading(true)
     try {
-      const res = await fetch('http://127.0.0.1:8000/auth/signin', {
+      const res = await fetch(`${API_URL}/auth/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -82,7 +83,11 @@ export default function SignIn({ onNavigate, onAuthSuccess, initialEmail }) {
         onNavigate('/dashboard')
       }, 700)
     } catch (err) {
-      setError(err.message)
+      if (err.name === 'TypeError') {
+        setError('Cannot connect to the server. If the Render instance is spinning up, please allow a moment and retry.')
+      } else {
+        setError(err.message)
+      }
     } finally {
       setLoading(false)
     }

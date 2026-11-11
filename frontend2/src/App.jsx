@@ -11,8 +11,9 @@ import SignIn from './components/SignIn.jsx'
 import SignUp from './components/SignUp.jsx'
 import StudentProfile from './components/StudentProfile.jsx'
 import ForgotPassword from './components/ForgotPassword.jsx'
+import API_URL from './apiConfig.js'
 
-const API_BASE = 'http://127.0.0.1:8000'
+const API_BASE = API_URL
 
 function getRouteFromPath(pathname) {
   const clean = (pathname || '/').replace(/\/+$/, '') || '/'
@@ -257,7 +258,7 @@ export default function App() {
       setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300)
     } catch (err) {
       if (err.name === 'TypeError') {
-        setApiError('Cannot reach the FastAPI server. Please ensure uvicorn is running at http://127.0.0.1:8000.')
+        setApiError('Unable to connect to the MindSpace API. If the server was sleeping, please wait a moment for the instance to awaken and click Predict again.')
       } else {
         setApiError(err.message)
       }

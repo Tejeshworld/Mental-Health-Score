@@ -35,6 +35,7 @@ app = FastAPI(title="MindSpace API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_origin_regex=r"^https:\/\/.*\.onrender\.com$",
     allow_methods=["*"],
     allow_headers=["*"],
 )

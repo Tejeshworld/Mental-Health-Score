@@ -32,7 +32,7 @@ function ScoreRing({ score }) {
   // Model score range is 1.0 to 10.0
   const numericScore = Number(score) || 0
   const pct = Math.min(Math.max((numericScore / 10) * 100, 0), 100)
-  const dash = `conic-gradient(from -90deg, #70E1B5 ${pct * 3.6}deg, rgba(112,225,181,.12) 0deg)`
+  const dash = `conic-gradient(from -90deg, #36D6A0 ${pct * 3.6}deg, rgba(54, 214, 160, 0.12) 0deg)`
   const numRef = useCounter(numericScore)
 
   return (
@@ -41,15 +41,14 @@ function ScoreRing({ score }) {
       borderRadius: '50%',
       background: dash,
       padding: 6,
-      boxShadow: '0 0 35px rgba(112,225,181,.35)',
-      animation: 'pulse-glow 3s ease-in-out infinite',
+      boxShadow: '0 0 35px rgba(54, 214, 160, 0.25)',
       flexShrink: 0,
     }}>
       <div style={{
         width: '100%', height: '100%',
         borderRadius: '50%',
-        background: 'linear-gradient(145deg, #104638, #092C24)',
-        border: '1px solid rgba(112,225,181,.20)',
+        background: '#0B1D17',
+        border: '1px solid rgba(130, 210, 175, 0.20)',
         display: 'grid', placeItems: 'center',
         textAlign: 'center',
       }}>
@@ -57,7 +56,7 @@ function ScoreRing({ score }) {
           <div ref={numRef} style={{
             font: "700 32px 'Space Grotesk'",
             lineHeight: 1,
-            color: '#F5FFF9',
+            color: '#F4F8F5',
             animation: 'countUp .5s ease both',
           }}>
             {numericScore.toFixed(2)}
@@ -95,15 +94,15 @@ function ScoreBar({ score }) {
       </div>
       <div style={{
         height: 8, borderRadius: 99,
-        background: 'rgba(112,225,181,.12)',
+        background: 'rgba(54, 214, 160, 0.12)',
         overflow: 'hidden',
       }}>
         <div style={{
           height: '100%',
           width: `${pct}%`,
           borderRadius: 99,
-          background: 'linear-gradient(90deg, #1DB87A, #70E1B5)',
-          boxShadow: '0 0 14px rgba(112,225,181,.6)',
+          background: 'linear-gradient(90deg, #1DB87A, #36D6A0)',
+          boxShadow: '0 0 14px rgba(54, 214, 160, 0.4)',
           transition: 'width 1.4s cubic-bezier(.22,.61,.36,1)',
         }} />
       </div>
@@ -116,16 +115,16 @@ function StatChip({ label, value }) {
     <div style={{
       padding: '11px 14px',
       borderRadius: 12,
-      background: 'rgba(16,70,56,.65)',
-      border: '1px solid rgba(112,225,181,.16)',
+      background: '#10271F',
+      border: '1px solid rgba(130, 210, 175, 0.16)',
     }}>
       <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4 }}>{label}</div>
-      <div style={{ font: "600 14px 'Space Grotesk'", color: '#F5FFF9' }}>{value}</div>
+      <div style={{ font: "600 14px 'Space Grotesk'", color: '#F4F8F5' }}>{value}</div>
     </div>
   )
 }
 
-export default function PredictionResult({ score, formData, timestamp, onReset }) {
+export default function PredictionResult({ score, formData, timestamp, onReset, onNavigate }) {
   const [copied, setCopied] = useState(false)
   const numericScore = Number(score) || 0
   const completionDate = timestamp || new Date().toLocaleString('en-US', {
@@ -156,29 +155,18 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
       margin: '0 auto',
       position: 'relative',
     }}>
-      {/* Subtle grid */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: `
-          linear-gradient(rgba(112,225,181,.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(112,225,181,.03) 1px, transparent 1px)
-        `,
-        backgroundSize: '40px 40px',
-        pointerEvents: 'none',
-      }} />
-
       <div style={{ position: 'relative', zIndex: 1 }}>
         {/* Dedicated Section Header */}
         <div style={{ textAlign: 'center', marginBottom: 38 }}>
-          <div className="section-eyebrow" style={{ justifyContent: 'center', marginBottom: 12 }}>
-            <LuSparkles size={14} />
-            ML Model Results
+          <div className="editorial-badge" style={{ marginBottom: 12 }}>
+            <LuSparkles size={14} /> ML Model Results
           </div>
           <h2 style={{
             font: "700 clamp(24px,3.2vw,38px)/1.2 'Space Grotesk'",
             letterSpacing: '-1.2px',
+            color: '#F4F8F5',
           }}>
-            Predicted Mental Health Score and <span className="gradient-text">Assessment Summary</span>
+            Predicted Wellbeing Score and <span className="gradient-text">Assessment Summary</span>
           </h2>
           <p style={{ color: 'var(--muted)', marginTop: 10, fontSize: 15, maxWidth: 580, margin: '10px auto 0' }}>
             Direct prediction from the trained Random Forest Regression model evaluated on your submitted digital habits and lifestyle factors.
@@ -189,24 +177,15 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
           maxWidth: 1040,
           margin: '0 auto',
         }}>
-          {/* Main result glass card */}
+          {/* Main result studio card */}
           <div className="glass-bright" style={{
             padding: 'clamp(18px, 4vw, 32px)',
             position: 'relative',
             overflow: 'hidden',
-            border: '1px solid rgba(112,225,181,.28)',
+            borderRadius: 16,
+            border: '1px solid rgba(130, 210, 175, 0.28)',
             animation: 'fadeSlideUp .4s ease both',
           }}>
-            {/* Top ambient glow */}
-            <div style={{
-              position: 'absolute', top: -70, right: -70,
-              width: 240, height: 240,
-              borderRadius: '50%',
-              background: 'radial-gradient(circle, rgba(112,225,181,.18) 0%, transparent 70%)',
-              filter: 'blur(45px)',
-              pointerEvents: 'none',
-            }} />
-
             <div style={{
               display: 'flex',
               justifyContent: 'space-between',
@@ -236,10 +215,10 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
                 gap: 6,
                 fontSize: 11,
                 color: 'var(--muted)',
-                background: 'rgba(112,225,181,.08)',
+                background: 'rgba(54, 214, 160, 0.08)',
                 padding: '4px 10px',
                 borderRadius: 999,
-                border: '1px solid rgba(112,225,181,.18)',
+                border: '1px solid rgba(130, 210, 175, 0.18)',
               }}>
                 <FiCalendar size={12} style={{ color: 'var(--mint)' }} />
                 <span>{completionDate}</span>
@@ -259,7 +238,7 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
               lineHeight: 1.65,
               marginBottom: 24,
             }}>
-              This score was generated by a Random Forest regression model trained on 5,000 student records. In the dataset, mental health scores range from <strong>3.6 to 9.4</strong> with an average of <strong>6.23</strong> on a 1.0 to 10.0 scale.
+              This score was generated by a trained Random Forest regression model on student lifestyle telemetry. In the dataset, mental health scores range from <strong>3.6 to 9.4</strong> with an average of <strong>6.23</strong> on a 1.0 to 10.0 scale.
             </p>
 
             {/* Score row */}
@@ -308,7 +287,7 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
               <StatChip label="Reported Stress" value={formData.stress_level} />
             </div>
 
-            {/* Actions including Download Assessment Report (PDF) */}
+            {/* Actions including Download Assessment Report (PDF) & View Dashboard */}
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
               <button
                 className="btn-primary"
@@ -316,17 +295,28 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
                 style={{
                   fontSize: 14,
                   padding: '13px 22px',
-                  boxShadow: '0 8px 28px rgba(29,184,122,.55)',
+                  boxShadow: '0 4px 20px rgba(54, 214, 160, 0.35)',
                 }}
               >
                 <FiDownload size={16} /> Download Assessment Report (PDF)
               </button>
+
+              {onNavigate && (
+                <button
+                  className="btn-secondary"
+                  onClick={() => onNavigate('/dashboard')}
+                >
+                  <FiActivity size={14} /> View Dashboard
+                </button>
+              )}
+
               <button className="btn-secondary" onClick={handleCopy}>
                 {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
                 {copied ? 'Score Copied' : 'Copy Score'}
               </button>
+
               <button className="btn-secondary" onClick={onReset}>
-                <FiRefreshCw size={14} /> Assess Again
+                <FiRefreshCw size={14} /> Take Another Assessment
               </button>
             </div>
           </div>
@@ -335,7 +325,8 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             <div className="glass" style={{
               padding: 'clamp(16px, 3.5vw, 24px)',
-              border: '1px solid rgba(112,225,181,.18)',
+              borderRadius: 14,
+              border: '1px solid rgba(130, 210, 175, 0.16)',
               animation: 'fadeSlideUp .5s ease both',
             }}>
               <div style={{
@@ -364,11 +355,11 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '9px 0',
-                  borderBottom: '1px solid rgba(112,225,181,.08)',
+                  borderBottom: '1px solid rgba(130, 210, 175, 0.08)',
                   fontSize: 12,
                 }}>
                   <span style={{ color: 'var(--muted)' }}>{k}</span>
-                  <span style={{ fontWeight: 600, color: '#F5FFF9' }}>{v}</span>
+                  <span style={{ fontWeight: 600, color: '#F4F8F5' }}>{v}</span>
                 </div>
               ))}
             </div>
@@ -377,8 +368,8 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
             <div style={{
               padding: '16px 18px',
               borderRadius: 14,
-              border: '1px solid rgba(112,225,181,.22)',
-              background: 'rgba(16,70,56,.55)',
+              border: '1px solid rgba(130, 210, 175, 0.20)',
+              background: '#0B1D17',
               color: 'var(--muted)',
               fontSize: 12,
               lineHeight: 1.65,
@@ -393,7 +384,7 @@ export default function PredictionResult({ score, formData, timestamp, onReset }
                 fontSize: 12,
               }}>
                 <MdOutlineHealthAndSafety size={16} />
-                ML Estimate – Not a Medical Diagnosis
+                Student Wellbeing Support Tool – Not a Medical Diagnosis
               </div>
               The predicted score is computed via machine learning regression on self-reported survey inputs. It provides educational awareness and does not replace medical or psychiatric evaluation by a licensed healthcare professional.
             </div>

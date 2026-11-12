@@ -8,7 +8,7 @@ import { MdOutlineHealthAndSafety } from 'react-icons/md'
 const TIPS = [
   {
     Icon: FiMoon,
-    color: '#70E1B5',
+    color: '#36D6A0',
     title: 'Healthy Sleep Routine',
     points: [
       'Aim for 7 to 9 hours of uninterrupted rest every night.',
@@ -19,7 +19,7 @@ const TIPS = [
   },
   {
     Icon: FiSmartphone,
-    color: '#1DB87A',
+    color: '#28A77B',
     title: 'Mindful Digital Usage',
     points: [
       'Enable built-in screen time limits on high-scroll social platforms.',
@@ -30,7 +30,7 @@ const TIPS = [
   },
   {
     Icon: FiActivity,
-    color: '#B7F5D8',
+    color: '#65E6BB',
     title: 'Daily Movement & Energy',
     points: [
       'Target 30 minutes of moderate aerobic or brisk walking exercise.',
@@ -63,7 +63,7 @@ const TIPS = [
   },
   {
     Icon: MdOutlineHealthAndSafety,
-    color: '#A3EFCB',
+    color: '#8FECC8',
     title: 'Campus & Professional Care',
     points: [
       'Your university student health centre provides confidential counselling.',
@@ -165,8 +165,8 @@ export default function WellnessTips() {
       <div style={{
         position: 'absolute', inset: 0,
         backgroundImage: `
-          linear-gradient(rgba(112,225,181,.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(112,225,181,.03) 1px, transparent 1px)
+          linear-gradient(rgba(54, 214, 160, .02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(54, 214, 160, .02) 1px, transparent 1px)
         `,
         backgroundSize: '40px 40px',
         pointerEvents: 'none',
@@ -212,8 +212,8 @@ export default function WellnessTips() {
           margin: '0 auto',
           padding: 'clamp(16px, 3vw, 20px) clamp(14px, 4vw, 24px)',
           borderRadius: 16,
-          border: '1px solid rgba(112,225,181,.26)',
-          background: 'rgba(16,70,56,.65)',
+          border: '1px solid rgba(130, 210, 175, 0.16)',
+          background: '#0B1D17',
           color: 'var(--muted)',
           fontSize: 13,
           lineHeight: 1.7,
@@ -224,7 +224,7 @@ export default function WellnessTips() {
             alignItems: 'center',
             justifyContent: 'center',
             gap: 8,
-            color: 'var(--mint)',
+            color: '#36D6A0',
             fontWeight: 700,
             fontSize: 13,
             marginBottom: 6,

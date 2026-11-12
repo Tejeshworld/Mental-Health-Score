@@ -51,7 +51,7 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
 
     if (score <= 2) return { label: 'Weak', score: 1, color: '#F4756A' }
     if (score <= 3) return { label: 'Medium', score: 2, color: '#F5C842' }
-    return { label: 'Strong', score: 3, color: '#70E1B5' }
+    return { label: 'Strong', score: 3, color: '#36D6A0' }
   }
 
   const strength = getPasswordStrength(formData.password)
@@ -151,9 +151,9 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
     width: '100%',
     padding: '11px 14px 11px 38px',
     borderRadius: 10,
-    border: '1px solid rgba(112,225,181,.22)',
-    background: 'rgba(9,44,36,.65)',
-    color: '#F5FFF9',
+    border: '1px solid rgba(130, 210, 175, 0.16)',
+    background: '#081511',
+    color: '#F4F8F5',
     fontSize: 13.5,
     outline: 'none',
     transition: 'border .2s, box-shadow .2s',
@@ -182,8 +182,8 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
       <div style={{
         position: 'absolute', inset: 0,
         backgroundImage: `
-          linear-gradient(rgba(112,225,181,.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(112,225,181,.03) 1px, transparent 1px)
+          linear-gradient(rgba(54, 214, 160, .02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(54, 214, 160, .02) 1px, transparent 1px)
         `,
         backgroundSize: '40px 40px',
         pointerEvents: 'none',
@@ -195,8 +195,9 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
         padding: 'clamp(24px, 5vw, 36px) clamp(16px, 4vw, 32px)',
         position: 'relative',
         zIndex: 1,
-        border: '1px solid rgba(112,225,181,.28)',
-        boxShadow: '0 20px 60px rgba(0,0,0,.45)',
+        background: '#0B1D17',
+        border: '1px solid rgba(130, 210, 175, 0.16)',
+        boxShadow: '0 20px 60px rgba(0,0,0,.60)',
         animation: 'fadeSlideUp .35s ease both',
       }}>
         {/* Header */}
@@ -204,17 +205,17 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
           <div style={{
             width: 48, height: 48,
             borderRadius: 14,
-            background: 'linear-gradient(135deg, #1DB87A, #70E1B5)',
-            boxShadow: '0 0 24px rgba(112,225,181,.40)',
+            background: 'linear-gradient(135deg, #28A77B, #36D6A0)',
+            boxShadow: '0 0 24px rgba(54, 214, 160, 0.35)',
             display: 'grid', placeItems: 'center',
-            color: '#082820', fontSize: 24,
+            color: '#050B09', fontSize: 24,
             margin: '0 auto 14px',
           }}>
             <LuBrain />
           </div>
           <h2 style={{
             font: "700 24px 'Space Grotesk'",
-            color: '#F5FFF9',
+            color: '#F4F8F5',
             marginBottom: 6,
           }}>
             Create Your MindSpace Account
@@ -229,9 +230,9 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
           <div style={{
             padding: '14px 16px',
             borderRadius: 11,
-            background: 'rgba(112,225,181,.14)',
-            border: '1px solid rgba(112,225,181,.40)',
-            color: '#B7F5D8',
+            background: 'rgba(54, 214, 160, 0.10)',
+            border: '1px solid rgba(54, 214, 160, 0.25)',
+            color: '#65E6BB',
             fontSize: 13.5,
             display: 'flex',
             alignItems: 'center',
@@ -241,13 +242,13 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
             animation: 'fadeIn .3s ease',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <FiCheck size={18} style={{ color: 'var(--mint)', flexShrink: 0 }} />
+              <FiCheck size={18} style={{ color: '#36D6A0', flexShrink: 0 }} />
               <span>{successMsg}</span>
             </div>
             <button
               onClick={() => onNavigate('/signin', { registeredEmail: formData.email.trim() })}
               style={{
-                background: 'rgba(112,225,181,.2)',
+                background: 'rgba(54, 214, 160, 0.2)',
                 border: '1px solid rgba(112,225,181,.3)',
                 color: '#F5FFF9',
                 padding: '4px 10px',
@@ -577,7 +578,7 @@ export default function SignUp({ onNavigate, onAuthSuccess }) {
         <div style={{
           marginTop: 22,
           paddingTop: 18,
-          borderTop: '1px solid rgba(112,225,181,.12)',
+          borderTop: '1px solid rgba(130, 210, 175, 0.10)',
           textAlign: 'center',
           fontSize: 13,
           color: 'var(--muted)',

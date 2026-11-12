@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
+import HomeFeatures from './components/HomeFeatures.jsx'
 import About from './components/About.jsx'
 import AssessmentForm from './components/AssessmentForm.jsx'
 import PredictionResult from './components/PredictionResult.jsx'
@@ -52,6 +53,7 @@ export default function App() {
 
   // ── Section Refs for in-page anchors ───────────────────────────────────────
   const homeRef     = useRef(null)
+  const featuresRef = useRef(null)
   const assessRef   = useRef(null)
   const resultRef   = useRef(null)
   const insightsRef = useRef(null)
@@ -286,12 +288,12 @@ export default function App() {
       {/* Auth notice banner when an unauthenticated student attempts to access a protected action */}
       {authNotice && (activeView === 'signin' || activeView === 'signup') && (
         <div style={{
-          background: 'rgba(16,70,56,.95)',
-          borderBottom: '1px solid rgba(112,225,181,.28)',
+          background: '#10271F',
+          borderBottom: '1px solid rgba(130, 210, 175, 0.25)',
           padding: '10px 5%',
           textAlign: 'center',
           fontSize: 13,
-          color: '#B7F5D8',
+          color: '#65E6BB',
           position: 'sticky',
           top: 70,
           zIndex: 990,
@@ -302,7 +304,7 @@ export default function App() {
       )}
 
       {/* ── View Router ────────────────────────────────────────────────────── */}
-      <main style={{ flex: 1, paddingTop: 70 }}>
+      <main style={{ flex: 1 }}>
         {activeView === 'signin' && (
           <SignIn
             onNavigate={handleNavigate}
@@ -345,7 +347,7 @@ export default function App() {
             <div ref={homeRef}>
               <Hero
                 onStart={() => scrollTo(assessRef)}
-                onInsights={() => scrollTo(insightsRef)}
+                onInsights={() => scrollTo(featuresRef)}
                 score={prediction ? prediction.score : null}
                 hasPrediction={prediction !== null && prediction !== undefined}
                 onResultClick={() => scrollTo(resultRef)}
@@ -354,7 +356,15 @@ export default function App() {
               />
             </div>
 
-            <div ref={assessRef} style={{ paddingTop: 20 }}>
+            <div ref={featuresRef}>
+              <HomeFeatures
+                onStart={() => scrollTo(assessRef)}
+                onSignUp={() => handleNavigate('/signup')}
+                currentUser={currentUser}
+              />
+            </div>
+
+            <div id="assess" ref={assessRef} style={{ paddingTop: 20 }}>
               <AssessmentForm
                 onSubmit={handlePredict}
                 loading={loading}
@@ -363,17 +373,18 @@ export default function App() {
             </div>
 
             {prediction && (
-              <div ref={resultRef} style={{ paddingTop: 20 }}>
+              <div id="results" ref={resultRef} style={{ paddingTop: 20 }}>
                 <PredictionResult
                   score={prediction.score}
                   formData={prediction.formData}
                   timestamp={prediction.timestamp}
                   onReset={handleReset}
+                  onNavigate={handleNavigate}
                 />
               </div>
             )}
 
-            <div ref={insightsRef} style={{ paddingTop: 20 }}>
+            <div id="insights" ref={insightsRef} style={{ paddingTop: 20 }}>
               <InsightsDashboard
                 formData={prediction?.formData}
                 score={prediction?.score}
@@ -381,7 +392,7 @@ export default function App() {
               />
             </div>
 
-            <div ref={aboutRef} style={{ paddingTop: 20 }}>
+            <div id="recommendations" ref={aboutRef} style={{ paddingTop: 20 }}>
               <WellnessTips />
             </div>
           </>

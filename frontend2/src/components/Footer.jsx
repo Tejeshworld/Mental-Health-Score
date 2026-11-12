@@ -6,9 +6,9 @@ export default function Footer({ onNavigate }) {
 
   return (
     <footer style={{
-      borderTop: '1px solid rgba(112,225,181,.14)',
+      borderTop: '1px solid rgba(130, 210, 175, 0.13)',
       padding: '48px clamp(12px, 4vw, 5%) 32px',
-      background: 'linear-gradient(180deg, rgba(9,44,36,.60) 0%, rgba(9,44,36,.98) 100%)',
+      background: '#050B09',
       position: 'relative',
     }}>
       <div style={{ maxWidth: 1300, margin: '0 auto' }}>
@@ -29,10 +29,10 @@ export default function Footer({ onNavigate }) {
               <span style={{
                 width: 42, height: 42,
                 borderRadius: 12,
-                background: 'linear-gradient(135deg, #1DB87A, #70E1B5)',
-                boxShadow: '0 0 20px rgba(112,225,181,.40)',
+                background: 'linear-gradient(135deg, #28A77B, #36D6A0)',
+                boxShadow: '0 0 20px rgba(54, 214, 160, 0.35)',
                 display: 'grid', placeItems: 'center',
-                color: '#082820', fontSize: 22,
+                color: '#050B09', fontSize: 22,
                 flexShrink: 0,
               }}>
                 <LuBrain />
@@ -40,7 +40,7 @@ export default function Footer({ onNavigate }) {
               <div>
                 <span style={{
                   font: "700 18px 'Space Grotesk'",
-                  color: '#F5FFF9',
+                  color: '#F4F8F5',
                   letterSpacing: '-0.3px',
                 }}>
                   MindSpace
@@ -119,8 +119,8 @@ export default function Footer({ onNavigate }) {
               gap: 8,
               padding: '8px 14px',
               borderRadius: 999,
-              border: '1px solid rgba(112,225,181,.22)',
-              background: 'rgba(112,225,181,.06)',
+              border: '1px solid rgba(130, 210, 175, 0.16)',
+              background: 'rgba(54, 214, 160, 0.06)',
               fontSize: 12,
               color: 'var(--muted)',
             }}>
@@ -136,7 +136,7 @@ export default function Footer({ onNavigate }) {
         <div style={{
           marginTop: 32,
           paddingTop: 20,
-          borderTop: '1px solid rgba(112,225,181,.10)',
+          borderTop: '1px solid rgba(130, 210, 175, 0.10)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
@@ -147,8 +147,8 @@ export default function Footer({ onNavigate }) {
         }}>
           <div>
             <span>(c) {year} MindSpace AI Wellbeing. Academic &amp; Educational Use Only.</span>
-            <span style={{ margin: '0 8px', color: 'rgba(112,225,181,.3)' }}>•</span>
-            <span style={{ fontWeight: 700, color: '#F5FFF9', letterSpacing: '0.2px' }}>
+            <span style={{ margin: '0 8px', color: 'rgba(130, 210, 175, 0.3)' }}>•</span>
+            <span style={{ fontWeight: 700, color: '#F4F8F5', letterSpacing: '0.2px' }}>
               Designed &amp; Developed by <span style={{ color: 'var(--mint)' }}>TEJESH K</span>
             </span>
           </div>

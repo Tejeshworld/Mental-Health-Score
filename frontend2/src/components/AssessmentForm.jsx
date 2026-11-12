@@ -33,24 +33,25 @@ const DEFAULT = {
 /* ── Shared input style ─────────────────────────────────── */
 const BASE_INPUT = {
   width: '100%',
-  border: '1px solid rgba(112,225,181,.20)',
-  borderRadius: 11,
+  border: '1px solid rgba(130, 210, 175, 0.16)',
+  borderRadius: 10,
   padding: '12px 14px',
-  background: 'rgba(9,44,36,.65)',
-  color: '#F5FFF9',
+  background: '#0B1D17',
+  color: '#F4F8F5',
   outline: 'none',
   transition: 'border .2s, box-shadow .2s',
   WebkitAppearance: 'none',
   appearance: 'none',
   fontSize: 14,
+  minHeight: 44,
 }
 
 const FOCUS_IN  = (e) => {
-  e.target.style.borderColor = '#70E1B5'
-  e.target.style.boxShadow   = '0 0 0 3px rgba(112,225,181,.14)'
+  e.target.style.borderColor = '#36D6A0'
+  e.target.style.boxShadow   = '0 0 0 3px rgba(54, 214, 160, 0.12)'
 }
 const FOCUS_OUT = (e) => {
-  e.target.style.borderColor = 'rgba(112,225,181,.20)'
+  e.target.style.borderColor = 'rgba(130, 210, 175, 0.16)'
   e.target.style.boxShadow   = 'none'
 }
 
@@ -59,10 +60,10 @@ function FieldLabel({ label, hint }) {
   return (
     <label style={{
       display: 'flex', justifyContent: 'space-between', gap: 8,
-      fontSize: 12, fontWeight: 600, color: '#cce8de', marginBottom: 8,
+      fontSize: 12, fontWeight: 600, color: '#C8DBD2', marginBottom: 8,
     }}>
       <span>{label}</span>
-      {hint && <span style={{ color: '#7aa598', fontWeight: 400 }}>{hint}</span>}
+      {hint && <span style={{ color: 'var(--muted)', fontWeight: 400 }}>{hint}</span>}
     </label>
   )
 }
@@ -88,7 +89,7 @@ function TextField({ label, hint, name, value, min, max, onChange }) {
   )
 }
 
-const CHEVRON_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%239bbfb0' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3E%3C/svg%3E")`
+const CHEVRON_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='%239AAFA5' d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'/%3E%3C/svg%3E")`
 
 function SelectField({ label, hint, name, value, options, onChange }) {
   return (
@@ -108,7 +109,7 @@ function SelectField({ label, hint, name, value, options, onChange }) {
         onFocus={FOCUS_IN} onBlur={FOCUS_OUT}
       >
         <option value="">Select…</option>
-        {options.map(o => <option key={o} value={o} style={{ background:'#104638' }}>{o}</option>)}
+        {options.map(o => <option key={o} value={o} style={{ background:'#0B1D17', color:'#F4F8F5' }}>{o}</option>)}
       </select>
     </div>
   )
@@ -124,22 +125,22 @@ function SliderField({ label, hint, name, value, min, max, step = 0.5, unit, onC
           <input
             type="range" name={name} min={min} max={max} step={step}
             value={value} onChange={onChange}
-            style={{ width:'100%', accentColor:'#70E1B5', cursor:'pointer', height:5, borderRadius:3 }}
+            style={{ width:'100%', accentColor:'#36D6A0', cursor:'pointer', height:5, borderRadius:3 }}
           />
           <div style={{
             position:'absolute', top:'50%', left:0,
             transform:'translateY(-50%)',
             height:5, width:`${pct}%`, borderRadius:3,
-            background:'linear-gradient(90deg,#1DB87A,#70E1B5)',
+            background:'linear-gradient(90deg, #1DB87A, #36D6A0)',
             pointerEvents:'none',
           }} />
         </div>
         <span style={{
           minWidth:54, textAlign:'center',
           padding:'5px 10px', borderRadius:8,
-          background:'rgba(112,225,181,.12)',
-          border:'1px solid rgba(112,225,181,.20)',
-          color:'#B7F5D8', fontSize:12, fontWeight:700,
+          background:'rgba(54, 214, 160, 0.08)',
+          border:'1px solid rgba(130, 210, 175, 0.20)',
+          color:'#65E6BB', fontSize:12, fontWeight:700,
         }}>
           {value}{unit}
         </span>
@@ -210,8 +211,8 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
       <div style={{
         position:'absolute', inset:0, pointerEvents:'none',
         backgroundImage:`
-          linear-gradient(rgba(112,225,181,.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(112,225,181,.03) 1px, transparent 1px)
+          linear-gradient(rgba(54, 214, 160, .02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(54, 214, 160, .02) 1px, transparent 1px)
         `,
         backgroundSize:'40px 40px',
       }} />
@@ -239,11 +240,11 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
                 width:36, height:36, borderRadius:'50%', flexShrink:0,
                 display:'grid', placeItems:'center', fontSize:16,
                 background: i < step
-                  ? 'linear-gradient(135deg,#1DB87A,#70E1B5)'
-                  : i === step ? 'rgba(112,225,181,.18)' : 'rgba(255,255,255,.06)',
-                color: i < step ? '#082820' : i === step ? '#70E1B5' : 'var(--muted)',
-                border: i === step ? '2px solid #70E1B5' : i < step ? '2px solid transparent' : '2px solid rgba(112,225,181,.18)',
-                boxShadow: i === step ? '0 0 18px rgba(112,225,181,.35)' : 'none',
+                  ? 'linear-gradient(135deg, #28A77B, #36D6A0)'
+                  : i === step ? 'rgba(54, 214, 160, 0.15)' : 'rgba(255, 255, 255, 0.04)',
+                color: i < step ? '#050B09' : i === step ? '#36D6A0' : 'var(--muted)',
+                border: i === step ? '2px solid #36D6A0' : i < step ? '2px solid transparent' : '1px solid rgba(130, 210, 175, 0.15)',
+                boxShadow: i === step ? '0 0 16px rgba(54, 214, 160, 0.25)' : 'none',
                 transition:'all .3s',
               }}>
                 {i < step ? <FiCheckCircle size={17} /> : <Icon size={16} />}
@@ -254,7 +255,7 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
               {i < STEPS.length - 1 && (
                 <div style={{
                   flex:1, height:2, borderRadius:2, minWidth:20,
-                  background: i < step ? 'linear-gradient(90deg,#1DB87A,#70E1B5)' : 'rgba(112,225,181,.14)',
+                  background: i < step ? 'linear-gradient(90deg, #28A77B, #36D6A0)' : 'rgba(130, 210, 175, 0.12)',
                   transition:'background .4s',
                 }} />
               )}
@@ -265,18 +266,18 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
         {/* Step indicators - Mobile */}
         <div className="stepper-mobile" style={{
           maxWidth: 460, margin: '0 auto 24px', flexDirection: 'column', gap: 10,
-          background: 'rgba(16,70,56,.45)', border: '1px solid rgba(112,225,181,.15)',
+          background: '#0B1D17', border: '1px solid rgba(130, 210, 175, 0.13)',
           borderRadius: 14, padding: '12px 16px',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: 13, fontWeight: 700, color: '#B7F5D8', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#F4F8F5', display: 'flex', alignItems: 'center', gap: 6 }}>
               {(() => {
                 const ActiveIcon = STEPS[step].Icon
-                return <ActiveIcon size={15} style={{ color: '#70E1B5' }} />
+                return <ActiveIcon size={15} style={{ color: '#36D6A0' }} />
               })()}
               Step {step + 1} of {STEPS.length}: {STEPS[step].label}
             </span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: '#70E1B5' }}>{pct}%</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#36D6A0' }}>{pct}%</span>
           </div>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             {STEPS.map((s, idx) => (
@@ -284,7 +285,7 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
                 key={s.key}
                 style={{
                   flex: 1, height: 6, borderRadius: 99,
-                  background: idx <= step ? 'linear-gradient(90deg,#1DB87A,#70E1B5)' : 'rgba(112,225,181,.12)',
+                  background: idx <= step ? 'linear-gradient(90deg, #28A77B, #36D6A0)' : 'rgba(130, 210, 175, 0.12)',
                   transition: 'background .3s',
                 }}
               />
@@ -298,9 +299,9 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
           {/* Card header */}
           <div style={{
             padding:'20px 28px 16px',
-            borderBottom:'1px solid rgba(112,225,181,.12)',
+            borderBottom:'1px solid rgba(130, 210, 175, 0.13)',
             display:'flex', justifyContent:'space-between', alignItems:'center',
-            background:'rgba(112,225,181,.04)',
+            background:'rgba(54, 214, 160, 0.03)',
           }}>
             <div>
               <h3 style={{ font:"600 17px 'Space Grotesk'", color:'var(--text)', margin:0 }}>
@@ -311,18 +312,18 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
               </p>
             </div>
             <div style={{ display:'flex', alignItems:'center', gap:10 }}>
-              <div style={{ width:80, height:5, borderRadius:99, background:'rgba(112,225,181,.12)', overflow:'hidden' }}>
+              <div style={{ width:80, height:5, borderRadius:99, background:'rgba(130, 210, 175, 0.10)', overflow:'hidden' }}>
                 <div style={{
                   height:'100%', width:`${pct}%`,
-                  background:'linear-gradient(90deg,#1DB87A,#70E1B5)',
+                  background:'linear-gradient(90deg, #28A77B, #36D6A0)',
                   borderRadius:99, transition:'width .4s ease',
                 }} />
               </div>
               <span style={{
                 padding:'5px 11px', borderRadius:99,
-                background:'rgba(112,225,181,.10)',
-                border:'1px solid rgba(112,225,181,.22)',
-                color:'#70E1B5', fontSize:11, fontWeight:700,
+                background:'rgba(54, 214, 160, 0.10)',
+                border:'1px solid rgba(54, 214, 160, 0.22)',
+                color:'#36D6A0', fontSize:11, fontWeight:700,
               }}>{pct}%</span>
             </div>
           </div>
@@ -425,7 +426,7 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
             {/* Nav buttons */}
             <div style={{
               padding:'16px clamp(16px, 4vw, 28px) 24px',
-              borderTop:'1px solid rgba(112,225,181,.10)',
+              borderTop:'1px solid rgba(130, 210, 175, 0.10)',
             }}>
               <div className="assessment-nav-group" style={{
                 justifyContent: step > 0 ? 'space-between' : 'flex-end',
@@ -455,11 +456,11 @@ export default function AssessmentForm({ onSubmit, loading, apiError }) {
 
             {step === STEPS.length - 1 && (
               <p style={{
-                textAlign:'center', fontSize:11, color:'#7aa598', paddingBottom:18,
+                textAlign:'center', fontSize:11, color:'#70877D', paddingBottom:18,
                 display:'flex', alignItems:'center', justifyContent:'center', gap:5,
               }}>
-                <FiShield size={11} style={{ color:'#70E1B5' }} />
-                Your data is sent only to your local FastAPI server and is never stored externally.
+                <FiShield size={11} style={{ color:'#36D6A0' }} />
+                Your data is processed securely and protected in accordance with student privacy standards.
               </p>
             )}
           </form>

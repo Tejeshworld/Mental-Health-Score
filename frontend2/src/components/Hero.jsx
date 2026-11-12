@@ -58,28 +58,26 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
 
           {/* Headline */}
           <h1 style={{
-            font: "700 clamp(32px,5.2vw,68px)/1.05 'Space Grotesk'",
+            font: "700 clamp(34px,5.4vw,66px)/1.08 'Space Grotesk'",
             letterSpacing: '-2px',
             marginBottom: 20,
-            maxWidth: 760,
+            maxWidth: 740,
             color: 'var(--text)',
           }}>
-            Your Mental Wellbeing
+            Find Your Balance.
             <br />
-            <span className="gradient-text">Matters.</span>
+            <span className="gradient-text">Understand Your Wellbeing.</span>
           </h1>
 
           {/* Description */}
           <p style={{
             color: 'var(--muted)',
-            fontSize: 'clamp(14.5px,1.5vw,17px)',
-            lineHeight: 1.80,
+            fontSize: 'clamp(15px,1.5vw,17px)',
+            lineHeight: 1.75,
             maxWidth: 580,
             marginBottom: 34,
           }}>
-            Understand your digital habits, academic lifestyle, and daily balance with AI-powered
-            student wellbeing insights. Discover your personalised wellbeing score using our
-            trained machine learning model.
+            An intelligent student wellbeing companion that transforms lifestyle and digital behaviour into meaningful insights. Discover your personalised score using our trained machine learning model.
           </p>
 
           {/* CTA buttons */}
@@ -89,7 +87,15 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
               onClick={onStart}
               style={{ fontSize: 14.5, padding: '13px 24px' }}
             >
-              Start Assessment <FiArrowRight size={15} />
+              Start Your Assessment <FiArrowRight size={15} />
+            </button>
+
+            <button
+              className="btn-secondary"
+              onClick={onInsights}
+              style={{ fontSize: 14.5, padding: '13px 20px' }}
+            >
+              <FiBarChart2 size={15} /> Explore MindSpace
             </button>
 
             {!currentUser ? (
@@ -100,7 +106,7 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
                   style={{
                     fontSize: 14.5,
                     padding: '13px 22px',
-                    borderColor: 'rgba(112,225,181,.3)',
+                    borderColor: 'rgba(130, 210, 175, 0.25)',
                     color: 'var(--mint)',
                   }}
                 >
@@ -121,21 +127,13 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
                 style={{
                   fontSize: 14.5,
                   padding: '13px 22px',
-                  borderColor: 'rgba(112,225,181,.3)',
+                  borderColor: 'rgba(130, 210, 175, 0.25)',
                   color: 'var(--mint)',
                 }}
               >
                 <FiUser size={15} /> Student Dashboard
               </button>
             )}
-
-            <button
-              className="btn-secondary"
-              onClick={onInsights}
-              style={{ fontSize: 14.5, padding: '13px 20px' }}
-            >
-              <FiBarChart2 size={15} /> Explore Insights
-            </button>
           </div>
 
           {/* Feature chips */}
@@ -187,12 +185,12 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
               transform: 'translate(-50%,-50%)',
               borderRadius: '50%',
               background: `
-                radial-gradient(circle at 35% 30%, rgba(255,255,255,.45), transparent 14%),
-                linear-gradient(135deg, #1DB87A, #70E1B5 55%, #B7F5D8)
+                radial-gradient(circle at 35% 30%, rgba(255,255,255,.35), transparent 14%),
+                linear-gradient(135deg, #1DB87A, #36D6A0 55%, #65E6BB)
               `,
               animation: 'float 5s ease-in-out infinite, pulse-glow 4s ease-in-out infinite',
               display: 'grid', placeItems: 'center',
-              color: '#082820',
+              color: '#050B09',
               fontSize: 54,
             }}>
               <LuBrain />
@@ -202,13 +200,13 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
             <div style={{
               position: 'absolute', inset: -20,
               borderRadius: '50%',
-              border: '1px solid rgba(112,225,181,.30)',
+              border: '1px solid rgba(130, 210, 175, 0.25)',
               transform: 'rotate(-25deg) scaleY(.42)',
             }} />
             <div style={{
               position: 'absolute', inset: -40,
               borderRadius: '50%',
-              border: '1px solid rgba(29,184,122,.22)',
+              border: '1px solid rgba(29, 184, 122, 0.20)',
               transform: 'rotate(40deg) scaleY(.38)',
             }} />
 
@@ -235,8 +233,8 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
             }}>
               <div style={{
                 width: 9, height: 9, borderRadius: '50%',
-                background: 'var(--lime)',
-                boxShadow: '0 0 10px var(--lime)',
+                background: 'var(--teal)',
+                boxShadow: '0 0 10px var(--teal)',
               }} />
             </div>
           </div>
@@ -247,13 +245,12 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
             onClick={hasPrediction && onResultClick ? onResultClick : undefined}
             style={{
               padding: '16px 24px',
-              borderRadius: 16,
+              borderRadius: 14,
               textAlign: 'center',
               minWidth: 170,
-              border: hasPrediction ? '1px solid rgba(112,225,181,.55)' : '1px solid rgba(112,225,181,.28)',
-              animation: 'borderPulseGreen 3s ease-in-out infinite',
+              border: hasPrediction ? '1px solid var(--mint)' : '1px solid var(--line)',
               cursor: hasPrediction && onResultClick ? 'pointer' : 'default',
-              boxShadow: hasPrediction ? '0 0 25px rgba(112,225,181,.25)' : undefined,
+              boxShadow: hasPrediction ? '0 0 24px rgba(54, 214, 160, 0.20)' : undefined,
               transition: 'transform .2s ease, box-shadow .2s ease',
             }}
           >
@@ -277,7 +274,7 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
             <div style={{
               fontSize: 11,
               fontWeight: hasPrediction ? 600 : 400,
-              color: hasPrediction ? '#B7F5D8' : 'var(--muted)',
+              color: hasPrediction ? '#65E6BB' : 'var(--muted)',
               marginTop: 6,
             }}>
               {hasPrediction && score !== null && score !== undefined
@@ -291,8 +288,8 @@ export default function Hero({ onStart, onInsights, score, hasPrediction, onResu
             display: 'flex', alignItems: 'center', gap: 8,
             padding: '8px 14px',
             borderRadius: 999,
-            border: '1px solid rgba(112,225,181,.18)',
-            background: 'rgba(112,225,181,.06)',
+            border: '1px solid rgba(130, 210, 175, 0.16)',
+            background: 'rgba(54, 214, 160, 0.06)',
             fontSize: 12, color: 'var(--muted)',
           }}>
             <FiActivity size={13} style={{ color: 'var(--mint)' }} />

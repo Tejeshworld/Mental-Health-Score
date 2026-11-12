@@ -17,8 +17,8 @@ export default function About({ onNavigate }) {
       <div style={{
         position: 'absolute', inset: 0,
         backgroundImage: `
-          linear-gradient(rgba(112,225,181,.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(112,225,181,.03) 1px, transparent 1px)
+          linear-gradient(rgba(54, 214, 160, .02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(54, 214, 160, .02) 1px, transparent 1px)
         `,
         backgroundSize: '40px 40px',
         pointerEvents: 'none',
@@ -80,14 +80,14 @@ export default function About({ onNavigate }) {
             <div style={{
               width: 48, height: 48,
               borderRadius: 14,
-              background: 'linear-gradient(135deg, #1DB87A, #70E1B5)',
+              background: 'linear-gradient(135deg, #28A77B, #36D6A0)',
               display: 'grid', placeItems: 'center',
-              color: '#082820', fontSize: 24,
+              color: '#050B09', fontSize: 24,
               marginBottom: 18,
             }}>
               <FiHeart />
             </div>
-            <h2 style={{ font: "700 20px 'Space Grotesk'", color: '#F5FFF9', marginBottom: 12 }}>
+            <h2 style={{ font: "700 20px 'Space Grotesk'", color: '#F4F8F5', marginBottom: 12 }}>
               Purpose of MindSpace
             </h2>
             <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.7, margin: 0 }}>
@@ -102,14 +102,14 @@ export default function About({ onNavigate }) {
             <div style={{
               width: 48, height: 48,
               borderRadius: 14,
-              background: 'linear-gradient(135deg, #1DB87A, #70E1B5)',
+              background: 'linear-gradient(135deg, #28A77B, #36D6A0)',
               display: 'grid', placeItems: 'center',
-              color: '#082820', fontSize: 24,
+              color: '#050B09', fontSize: 24,
               marginBottom: 18,
             }}>
               <FiActivity />
             </div>
-            <h2 style={{ font: "700 20px 'Space Grotesk'", color: '#F5FFF9', marginBottom: 12 }}>
+            <h2 style={{ font: "700 20px 'Space Grotesk'", color: '#F4F8F5', marginBottom: 12 }}>
               Mental Wellbeing Awareness
             </h2>
             <p style={{ color: 'var(--muted)', fontSize: 14, lineHeight: 1.7, margin: 0 }}>
@@ -225,19 +225,19 @@ export default function About({ onNavigate }) {
                 style={{
                   padding: '22px 18px',
                   borderRadius: 12,
-                  background: 'rgba(9,44,36,.55)',
-                  border: '1px solid rgba(112,225,181,.16)',
+                  background: '#0B1D17',
+                  border: '1px solid rgba(130, 210, 175, 0.13)',
                 }}
               >
                 <div style={{
                   font: "700 28px 'Space Grotesk'",
-                  color: 'var(--mint)',
-                  opacity: 0.8,
+                  color: '#36D6A0',
+                  opacity: 0.9,
                   marginBottom: 8,
                 }}>
                   {step}
                 </div>
-                <h4 style={{ font: "600 15px 'Space Grotesk'", color: '#F5FFF9', marginBottom: 6 }}>
+                <h4 style={{ font: "600 15px 'Space Grotesk'", color: '#F4F8F5', marginBottom: 6 }}>
                   {title}
                 </h4>
                 <p style={{ color: 'var(--muted)', fontSize: 12.5, lineHeight: 1.6, margin: 0 }}>
@@ -252,17 +252,17 @@ export default function About({ onNavigate }) {
         <div className="glass" style={{
           padding: '32px 30px',
           borderRadius: 16,
-          border: '1px solid rgba(112,225,181,.25)',
-          background: 'linear-gradient(135deg, rgba(9,44,36,.85), rgba(16,70,56,.75))',
+          border: '1px solid rgba(130, 210, 175, 0.16)',
+          background: '#0B1D17',
           marginBottom: 50,
         }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 18, flexWrap: 'wrap' }}>
             <div style={{
               width: 48, height: 48,
               borderRadius: 14,
-              background: 'rgba(112,225,181,.12)',
-              border: '1px solid rgba(112,225,181,.30)',
-              color: 'var(--mint)',
+              background: 'rgba(54, 214, 160, 0.10)',
+              border: '1px solid rgba(54, 214, 160, 0.25)',
+              color: '#36D6A0',
               fontSize: 24,
               display: 'grid', placeItems: 'center',
               flexShrink: 0,
@@ -270,14 +270,14 @@ export default function About({ onNavigate }) {
               <FiLock />
             </div>
             <div style={{ flex: 1, minWidth: 260 }}>
-              <h3 style={{ font: "700 19px 'Space Grotesk'", color: '#F5FFF9', margin: '0 0 8px' }}>
+              <h3 style={{ font: "700 19px 'Space Grotesk'", color: '#F4F8F5', margin: '0 0 8px' }}>
                 Privacy and Data Protection
               </h3>
               <p style={{ color: 'var(--muted)', fontSize: 13.5, lineHeight: 1.7, margin: '0 0 12px' }}>
                 We believe mental wellbeing information is deeply personal. MindSpace adheres to strict privacy standards:
               </p>
               <ul style={{
-                color: '#cce8de',
+                color: '#C8DBD2',
                 fontSize: 13,
                 lineHeight: 1.8,
                 paddingLeft: 20,

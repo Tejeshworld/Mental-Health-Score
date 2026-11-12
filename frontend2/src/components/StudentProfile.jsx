@@ -3,9 +3,9 @@ import {
   FiUser, FiMail, FiPhone, FiCalendar, FiBookOpen,
   FiEdit2, FiCheck, FiX, FiLogOut, FiActivity,
   FiClock, FiTrendingUp, FiArrowRight, FiAlertCircle,
-  FiLock, FiChevronDown
+  FiLock, FiChevronDown, FiShield, FiAward
 } from 'react-icons/fi'
-import { LuBrain, LuGraduationCap } from 'react-icons/lu'
+import { LuBrain, LuGraduationCap, LuSparkles } from 'react-icons/lu'
 import { ACADEMIC_CLASSES } from './SignUp.jsx'
 import API_URL from '../apiConfig.js'
 
@@ -164,7 +164,6 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
     })
   }
 
-  // Get initials for avatar
   const getInitials = (name) => {
     if (!name) return 'ST'
     const parts = name.trim().split(' ')
@@ -174,30 +173,36 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
 
   const inputStyle = {
     width: '100%',
-    padding: '10px 12px 10px 36px',
-    borderRadius: 9,
-    border: '1px solid rgba(112,225,181,.28)',
-    background: 'rgba(9,44,36,.85)',
-    color: '#F5FFF9',
+    padding: '11px 14px 11px 38px',
+    borderRadius: 10,
+    border: '1px solid rgba(130, 210, 175, 0.16)',
+    background: '#081511',
+    color: '#F4F8F5',
     fontSize: 13.5,
     outline: 'none',
+    transition: 'border .2s, box-shadow .2s',
   }
 
   const iconStyle = {
     position: 'absolute',
     top: '50%',
     transform: 'translateY(-50%)',
-    left: 11,
+    left: 13,
     color: 'var(--muted)',
     fontSize: 14,
     pointerEvents: 'none',
   }
 
+  const studentName = profile?.student_name || profile?.full_name || 'Student'
+  const latestScore = activity?.latest_predicted_score !== null && activity?.latest_predicted_score !== undefined
+    ? Number(activity.latest_predicted_score)
+    : null
+
   return (
     <section className="bg-campus" style={{
       minHeight: 'calc(100vh - 140px)',
       padding: '30px clamp(12px, 4vw, 5%) 70px',
-      maxWidth: 1200,
+      maxWidth: 1300,
       margin: '0 auto',
       position: 'relative',
     }}>
@@ -205,66 +210,78 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
       <div style={{
         position: 'absolute', inset: 0,
         backgroundImage: `
-          linear-gradient(rgba(112,225,181,.03) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(112,225,181,.03) 1px, transparent 1px)
+          linear-gradient(rgba(54, 214, 160, .02) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(54, 214, 160, .02) 1px, transparent 1px)
         `,
         backgroundSize: '40px 40px',
         pointerEvents: 'none',
       }} />
 
       <div style={{ position: 'relative', zIndex: 1 }}>
-        {/* Top Header: Title, Subtitle & Sign Out */}
+        {/* Editorial Welcome Header */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'flex-start',
           flexWrap: 'wrap',
           gap: 16,
-          marginBottom: 30,
+          marginBottom: 32,
+          paddingBottom: 24,
+          borderBottom: '1px solid rgba(130, 210, 175, 0.10)',
         }}>
           <div>
-            <div className="section-eyebrow" style={{ marginBottom: 6 }}>
+            <div className="section-eyebrow" style={{ marginBottom: 8 }}>
               <FiUser size={13} />
-              Student Portal
+              Student Portal & Wellbeing Telemetry
             </div>
             <h1 style={{
-              font: "700 clamp(24px,3vw,34px) 'Space Grotesk'",
-              color: '#F5FFF9',
+              font: "700 clamp(26px, 3.5vw, 38px) 'Space Grotesk'",
+              color: '#F4F8F5',
               margin: '0 0 6px',
+              letterSpacing: '-1px',
             }}>
-              My Student Profile
+              Welcome back, <span className="gradient-text">{studentName}</span>
             </h1>
-            <p style={{ color: 'var(--muted)', fontSize: 14, margin: 0 }}>
-              Manage your personal details and student information.
+            <p style={{ color: 'var(--muted)', fontSize: 14, margin: 0, maxWidth: 600 }}>
+              Review your lifestyle telemetry, manage your academic profile, and track your ongoing mental equilibrium.
             </p>
           </div>
 
-          <button
-            onClick={onSignOut}
-            className="btn-secondary"
-            style={{
-              padding: '10px 18px',
-              fontSize: 13,
-              borderColor: 'rgba(244,117,106,.3)',
-              color: '#F4A49E',
-            }}
-          >
-            <FiLogOut size={14} /> Sign Out
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <button
+              onClick={onStartAssessment}
+              className="btn-primary"
+              style={{ padding: '10px 18px', fontSize: 13 }}
+            >
+              <LuBrain size={15} /> Take Assessment
+            </button>
+            <button
+              onClick={onSignOut}
+              className="btn-secondary"
+              style={{
+                padding: '10px 18px',
+                fontSize: 13,
+                borderColor: 'rgba(244, 117, 106, 0.25)',
+                color: '#F4A49E',
+              }}
+            >
+              <FiLogOut size={14} /> Sign Out
+            </button>
+          </div>
         </div>
 
-        {/* Success message banner */}
+        {/* Notifications */}
         {successMsg && (
           <div style={{
-            padding: '12px 16px',
+            padding: '12px 18px',
             borderRadius: 12,
-            background: 'rgba(112,225,181,.12)',
-            border: '1px solid rgba(112,225,181,.35)',
-            color: '#B7F5D8',
+            background: 'rgba(54, 214, 160, 0.10)',
+            border: '1px solid rgba(54, 214, 160, 0.25)',
+            color: '#65E6BB',
             fontSize: 13,
             display: 'flex',
             alignItems: 'center',
-            gap: 8,
+            gap: 10,
             marginBottom: 24,
             animation: 'fadeIn .3s ease',
           }}>
@@ -272,25 +289,94 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
           </div>
         )}
 
-        {/* Error message banner */}
         {error && (
           <div style={{
-            padding: '12px 16px',
+            padding: '12px 18px',
             borderRadius: 12,
-            background: 'rgba(244,117,106,.12)',
-            border: '1px solid rgba(244,117,106,.35)',
+            background: 'rgba(244, 117, 106, 0.10)',
+            border: '1px solid rgba(244, 117, 106, 0.25)',
             color: '#F4A49E',
             fontSize: 13,
             display: 'flex',
             alignItems: 'center',
-            gap: 8,
+            gap: 10,
             marginBottom: 24,
           }}>
             <FiAlertCircle size={16} /> {error}
           </div>
         )}
 
-        {/* Two-column layout: Left = Profile Details, Right = Activity */}
+        {/* 4 Stat Overview Cards */}
+        <div className="profile-stats-grid" style={{ marginBottom: 30 }}>
+          {/* Card 1: Latest Score */}
+          <div className="glass" style={{ padding: 'clamp(14px, 3vw, 20px)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: '#36D6A0', marginBottom: 8 }}>
+              <FiTrendingUp size={16} />
+              <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Latest Score
+              </span>
+            </div>
+            <div style={{ font: "700 clamp(22px, 3vw, 28px) 'Space Grotesk'", color: '#36D6A0' }}>
+              {latestScore !== null ? `${latestScore.toFixed(2)}` : '– –'}
+              {latestScore !== null && <span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}> / 10.0</span>}
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
+              {latestScore !== null ? 'Algorithm inference' : 'No assessment taken yet'}
+            </div>
+          </div>
+
+          {/* Card 2: Completed Assessments */}
+          <div className="glass" style={{ padding: 'clamp(14px, 3vw, 20px)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: '#65E6BB', marginBottom: 8 }}>
+              <FiActivity size={16} />
+              <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Completed
+              </span>
+            </div>
+            <div style={{ font: "700 clamp(22px, 3vw, 28px) 'Space Grotesk'", color: '#F4F8F5' }}>
+              {activity?.completed_assessments || 0}
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
+              Total recorded runs
+            </div>
+          </div>
+
+          {/* Card 3: Academic Stage */}
+          <div className="glass" style={{ padding: 'clamp(14px, 3vw, 20px)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: '#4BAB84', marginBottom: 8 }}>
+              <LuGraduationCap size={16} />
+              <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Academic Year
+              </span>
+            </div>
+            <div style={{ font: "700 clamp(16px, 2.5vw, 20px) 'Space Grotesk'", color: '#F4F8F5', wordBreak: 'break-word' }}>
+              {profile?.academic_class || '1st Year'}
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
+              {profile?.student_age ? `${profile.student_age} years old` : 'Active student'}
+            </div>
+          </div>
+
+          {/* Card 4: Last Activity Date */}
+          <div className="glass" style={{ padding: 'clamp(14px, 3vw, 20px)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: 'var(--muted)', marginBottom: 8 }}>
+              <FiClock size={16} />
+              <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                Last Activity
+              </span>
+            </div>
+            <div style={{ font: "600 clamp(14px, 2vw, 16px) 'Space Grotesk'", color: '#F4F8F5', paddingTop: 4 }}>
+              {activity?.latest_assessment_date
+                ? new Date(activity.latest_assessment_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+                : 'No prior records'}
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
+              Most recent telemetry
+            </div>
+          </div>
+        </div>
+
+        {/* Two-column layout: Left = Profile Details, Right = Activity History */}
         <div className="profile-layout-grid">
           {/* ── Left: Student Identity Card ────────────────────── */}
           <div className="glass-bright" style={{ padding: 'clamp(18px, 3.5vw, 28px)', position: 'relative', width: '100%' }}>
@@ -305,7 +391,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
               <span style={{
                 fontSize: 11,
                 letterSpacing: '1.5px',
-                color: 'var(--mint)',
+                color: '#36D6A0',
                 textTransform: 'uppercase',
                 fontWeight: 700,
               }}>
@@ -321,16 +407,16 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                     gap: 6,
                     fontSize: 12.5,
                     fontWeight: 600,
-                    color: 'var(--mint)',
-                    background: 'rgba(112,225,181,.08)',
-                    border: '1px solid rgba(112,225,181,.25)',
+                    color: '#36D6A0',
+                    background: 'rgba(54, 214, 160, 0.08)',
+                    border: '1px solid rgba(130, 210, 175, 0.22)',
                     padding: '7px 14px',
                     borderRadius: 8,
                     cursor: 'pointer',
                     transition: 'all .2s ease',
                   }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(112,225,181,.16)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(112,225,181,.08)'}
+                  onMouseEnter={e => e.currentTarget.style.background = 'rgba(54, 214, 160, 0.16)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'rgba(54, 214, 160, 0.08)'}
                 >
                   <FiEdit2 size={13} /> Edit Profile
                 </button>
@@ -348,10 +434,10 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
               <div style={{
                 width: 62, height: 62,
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #1DB87A, #70E1B5)',
-                boxShadow: '0 0 24px rgba(112,225,181,.40)',
+                background: 'linear-gradient(135deg, #28A77B, #36D6A0)',
+                boxShadow: '0 0 24px rgba(54, 214, 160, 0.35)',
                 display: 'grid', placeItems: 'center',
-                color: '#082820',
+                color: '#050B09',
                 fontSize: 22,
                 fontWeight: 700,
                 flexShrink: 0,
@@ -362,7 +448,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
               <div style={{ minWidth: 0, flex: 1 }}>
                 <h3 style={{
                   font: "700 clamp(18px, 2.5vw, 22px) 'Space Grotesk'",
-                  color: '#F5FFF9',
+                  color: '#F4F8F5',
                   margin: '0 0 4px',
                   wordBreak: 'break-word',
                 }}>
@@ -379,7 +465,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
               <form onSubmit={handleSaveProfile} style={{ display: 'flex', flexDirection: 'column', gap: 13 }}>
                 {/* Student Name */}
                 <div>
-                  <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#cce8de', marginBottom: 4 }}>
+                  <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#C8DBD2', marginBottom: 4 }}>
                     Student Name
                   </label>
                   <div style={{ position: 'relative' }}>
@@ -398,7 +484,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                 {/* Student Age & Class in responsive grid */}
                 <div className="profile-details-grid">
                   <div>
-                    <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#cce8de', marginBottom: 4 }}>
+                    <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#C8DBD2', marginBottom: 4 }}>
                       Student Age
                     </label>
                     <div style={{ position: 'relative' }}>
@@ -417,7 +503,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#cce8de', marginBottom: 4 }}>
+                    <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#C8DBD2', marginBottom: 4 }}>
                       Class / Academic Year
                     </label>
                     <div style={{ position: 'relative' }}>
@@ -436,7 +522,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                         }}
                       >
                         {ACADEMIC_CLASSES.map(cls => (
-                          <option key={cls} value={cls} style={{ background: '#0A3328', color: '#F5FFF9' }}>
+                          <option key={cls} value={cls} style={{ background: '#0B1D17', color: '#F4F8F5' }}>
                             {cls}
                           </option>
                         ))}
@@ -455,7 +541,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
 
                 {/* School / College Name */}
                 <div>
-                  <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#cce8de', marginBottom: 4 }}>
+                  <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#C8DBD2', marginBottom: 4 }}>
                     School / College Name
                   </label>
                   <div style={{ position: 'relative' }}>
@@ -473,7 +559,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
 
                 {/* Phone Number */}
                 <div>
-                  <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#cce8de', marginBottom: 4 }}>
+                  <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#C8DBD2', marginBottom: 4 }}>
                     Phone Number
                   </label>
                   <div style={{ position: 'relative' }}>
@@ -492,7 +578,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                 {/* Email ID (Read-only) */}
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                    <label style={{ fontSize: 11, fontWeight: 600, color: '#cce8de' }}>
+                    <label style={{ fontSize: 11, fontWeight: 600, color: '#C8DBD2' }}>
                       Email ID
                     </label>
                     <span style={{
@@ -515,8 +601,8 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                         ...inputStyle,
                         opacity: 0.65,
                         cursor: 'not-allowed',
-                        borderColor: 'rgba(255,255,255,.12)',
-                        background: 'rgba(0,0,0,.25)'
+                        borderColor: 'rgba(130, 210, 175, 0.10)',
+                        background: 'rgba(0,0,0,.35)'
                       }}
                     />
                   </div>
@@ -535,7 +621,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                       padding: '11px 16px',
                       fontSize: 13.5,
                       fontWeight: 700,
-                      borderRadius: 9,
+                      borderRadius: 10,
                     }}
                   >
                     {saveLoading ? 'Saving...' : <><FiCheck size={14} /> Save Changes</>}
@@ -544,7 +630,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                     type="button"
                     className="btn-secondary"
                     onClick={cancelEdit}
-                    style={{ padding: '11px 16px', fontSize: 13, borderRadius: 9 }}
+                    style={{ padding: '11px 16px', fontSize: 13, borderRadius: 10 }}
                   >
                     <FiX size={14} /> Cancel
                   </button>
@@ -557,11 +643,11 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                 <div style={{
                   padding: '11px 14px',
                   borderRadius: 10,
-                  background: 'rgba(9,44,36,.5)',
-                  border: '1px solid rgba(112,225,181,.10)',
+                  background: 'rgba(11, 29, 23, 0.7)',
+                  border: '1px solid rgba(130, 210, 175, 0.10)',
                 }}>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>Student Name</div>
-                  <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F5FFF9', wordBreak: 'break-word' }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F4F8F5', wordBreak: 'break-word' }}>
                     {profile?.student_name || profile?.full_name || 'Not provided'}
                   </div>
                 </div>
@@ -571,11 +657,11 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                   <div style={{
                     padding: '11px 14px',
                     borderRadius: 10,
-                    background: 'rgba(9,44,36,.5)',
-                    border: '1px solid rgba(112,225,181,.10)',
+                    background: 'rgba(11, 29, 23, 0.7)',
+                    border: '1px solid rgba(130, 210, 175, 0.10)',
                   }}>
                     <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>Student Age</div>
-                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F5FFF9' }}>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F4F8F5' }}>
                       {profile?.student_age ? `${profile.student_age} years` : 'Not specified'}
                     </div>
                   </div>
@@ -583,11 +669,11 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                   <div style={{
                     padding: '11px 14px',
                     borderRadius: 10,
-                    background: 'rgba(9,44,36,.5)',
-                    border: '1px solid rgba(112,225,181,.10)',
+                    background: 'rgba(11, 29, 23, 0.7)',
+                    border: '1px solid rgba(130, 210, 175, 0.10)',
                   }}>
                     <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>Class / Year</div>
-                    <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--mint)', wordBreak: 'break-word' }}>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: '#36D6A0', wordBreak: 'break-word' }}>
                       {profile?.academic_class || 'Not specified'}
                     </div>
                   </div>
@@ -597,11 +683,11 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                 <div style={{
                   padding: '11px 14px',
                   borderRadius: 10,
-                  background: 'rgba(9,44,36,.5)',
-                  border: '1px solid rgba(112,225,181,.10)',
+                  background: 'rgba(11, 29, 23, 0.7)',
+                  border: '1px solid rgba(130, 210, 175, 0.10)',
                 }}>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>School / College Name</div>
-                  <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F5FFF9', wordBreak: 'break-word' }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F4F8F5', wordBreak: 'break-word' }}>
                     {profile?.college_name || profile?.college || 'Not provided'}
                   </div>
                 </div>
@@ -610,11 +696,11 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                 <div style={{
                   padding: '11px 14px',
                   borderRadius: 10,
-                  background: 'rgba(9,44,36,.5)',
-                  border: '1px solid rgba(112,225,181,.10)',
+                  background: 'rgba(11, 29, 23, 0.7)',
+                  border: '1px solid rgba(130, 210, 175, 0.10)',
                 }}>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>Phone Number</div>
-                  <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F5FFF9', wordBreak: 'break-all' }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F4F8F5', wordBreak: 'break-all' }}>
                     {profile?.phone_number || 'Not provided'}
                   </div>
                 </div>
@@ -623,11 +709,11 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                 <div style={{
                   padding: '11px 14px',
                   borderRadius: 10,
-                  background: 'rgba(9,44,36,.5)',
-                  border: '1px solid rgba(112,225,181,.10)',
+                  background: 'rgba(11, 29, 23, 0.7)',
+                  border: '1px solid rgba(130, 210, 175, 0.10)',
                 }}>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 2 }}>Email ID</div>
-                  <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F5FFF9', wordBreak: 'break-all' }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 600, color: '#F4F8F5', wordBreak: 'break-all' }}>
                     {profile?.email}
                   </div>
                 </div>
@@ -637,58 +723,6 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
 
           {/* ── Right: My Wellbeing Activity ───────────────────── */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20, width: '100%', minWidth: 0 }}>
-            {/* 3 Metric Summary Badges */}
-            <div className="profile-stats-grid">
-              <div className="glass" style={{ padding: 'clamp(14px, 3vw, 18px)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: 'var(--mint)', marginBottom: 8 }}>
-                  <FiActivity size={16} />
-                  <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                    Completed
-                  </span>
-                </div>
-                <div style={{ font: "700 clamp(20px, 3vw, 24px) 'Space Grotesk'", color: '#F5FFF9' }}>
-                  {activity?.completed_assessments || 0}
-                </div>
-                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
-                  Total assessments
-                </div>
-              </div>
-
-              <div className="glass" style={{ padding: 'clamp(14px, 3vw, 18px)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: '#B7F5D8', marginBottom: 8 }}>
-                  <FiTrendingUp size={16} />
-                  <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                    Latest Score
-                  </span>
-                </div>
-                <div style={{ font: "700 clamp(20px, 3vw, 24px) 'Space Grotesk'", color: 'var(--mint)' }}>
-                  {activity?.latest_predicted_score !== null && activity?.latest_predicted_score !== undefined
-                    ? `${Number(activity.latest_predicted_score).toFixed(2)}`
-                    : '– –'}
-                </div>
-                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
-                  Scale: 1.0 – 10.0
-                </div>
-              </div>
-
-              <div className="glass" style={{ padding: 'clamp(14px, 3vw, 18px)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: 'var(--muted)', marginBottom: 8 }}>
-                  <FiClock size={16} />
-                  <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                    Last Active
-                  </span>
-                </div>
-                <div style={{ font: "600 13px 'Space Grotesk'", color: '#F5FFF9', paddingTop: 6 }}>
-                  {activity?.latest_assessment_date
-                    ? new Date(activity.latest_assessment_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                    : 'No records'}
-                </div>
-                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
-                  Assessment date
-                </div>
-              </div>
-            </div>
-
             {/* Assessment History Section */}
             <div className="glass-bright" style={{ padding: 'clamp(18px, 3.5vw, 26px)', width: '100%', minWidth: 0 }}>
               <div style={{
@@ -697,26 +731,31 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                 alignItems: 'center',
                 flexWrap: 'wrap',
                 gap: 12,
-                marginBottom: 18,
+                marginBottom: 20,
               }}>
-                <h3 style={{
-                  font: "600 clamp(16px, 2.5vw, 18px) 'Space Grotesk'",
-                  color: '#F5FFF9',
-                  margin: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                }}>
-                  <LuBrain size={18} style={{ color: 'var(--mint)' }} />
-                  My Wellbeing Activity
-                </h3>
+                <div>
+                  <h3 style={{
+                    font: "600 clamp(16px, 2.5vw, 19px) 'Space Grotesk'",
+                    color: '#F4F8F5',
+                    margin: '0 0 4px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                  }}>
+                    <LuBrain size={19} style={{ color: '#36D6A0' }} />
+                    Wellbeing Assessment Telemetry
+                  </h3>
+                  <p style={{ margin: 0, fontSize: 12, color: 'var(--muted)' }}>
+                    Historical log of evaluated routine parameters and predicted equilibrium.
+                  </p>
+                </div>
 
                 <button
                   onClick={onStartAssessment}
                   className="btn-primary"
                   style={{ padding: '8px 14px', fontSize: 12 }}
                 >
-                  Start Assessment <FiArrowRight size={13} />
+                  New Assessment <FiArrowRight size={13} />
                 </button>
               </div>
 
@@ -731,8 +770,8 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                   }}>
                     <thead>
                       <tr style={{
-                        borderBottom: '1px solid rgba(112,225,181,.16)',
-                        color: 'var(--mint)',
+                        borderBottom: '1px solid rgba(130, 210, 175, 0.16)',
+                        color: '#36D6A0',
                         fontSize: 11,
                         textTransform: 'uppercase',
                         letterSpacing: '1px',
@@ -741,7 +780,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                         <th style={{ padding: '10px 8px' }}>Platform</th>
                         <th style={{ padding: '10px 8px' }}>Screen Time</th>
                         <th style={{ padding: '10px 8px' }}>Stress</th>
-                        <th style={{ padding: '10px 8px', textAlign: 'right' }}>Predicted Score</th>
+                        <th style={{ padding: '10px 8px', textAlign: 'right' }}>Score</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -749,8 +788,8 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                         <tr
                           key={item.id || idx}
                           style={{
-                            borderBottom: '1px solid rgba(112,225,181,.07)',
-                            color: '#F5FFF9',
+                            borderBottom: '1px solid rgba(130, 210, 175, 0.08)',
+                            color: '#F4F8F5',
                           }}
                         >
                           <td style={{ padding: '12px 8px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>
@@ -769,15 +808,15 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                               padding: '3px 8px',
                               borderRadius: 6,
                               fontSize: 11,
-                              background: 'rgba(112,225,181,.10)',
-                              border: '1px solid rgba(112,225,181,.20)',
-                              color: 'var(--mint)',
+                              background: 'rgba(54, 214, 160, 0.10)',
+                              border: '1px solid rgba(54, 214, 160, 0.20)',
+                              color: '#36D6A0',
                               whiteSpace: 'nowrap',
                             }}>
                               {item.stress_level}
                             </span>
                           </td>
-                          <td style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 700, color: 'var(--mint)' }}>
+                          <td style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 700, color: '#36D6A0' }}>
                             {Number(item.predicted_score).toFixed(2)}
                           </td>
                         </tr>
@@ -787,34 +826,34 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                 </div>
               ) : (
                 <div style={{
-                  padding: '32px 18px',
+                  padding: '36px 20px',
                   textAlign: 'center',
-                  background: 'rgba(9,44,36,.4)',
+                  background: '#0B1D17',
                   borderRadius: 14,
-                  border: '1px dashed rgba(112,225,181,.22)',
+                  border: '1px dashed rgba(130, 210, 175, 0.20)',
                 }}>
                   <div style={{
-                    width: 44, height: 44,
-                    borderRadius: 12,
-                    background: 'rgba(112,225,181,.10)',
-                    color: 'var(--mint)',
+                    width: 46, height: 46,
+                    borderRadius: 14,
+                    background: 'rgba(54, 214, 160, 0.10)',
+                    color: '#36D6A0',
                     display: 'grid', placeItems: 'center',
-                    fontSize: 20, margin: '0 auto 12px',
+                    fontSize: 22, margin: '0 auto 14px',
                   }}>
                     <FiActivity />
                   </div>
-                  <h4 style={{ font: "600 15px 'Space Grotesk'", color: '#F5FFF9', margin: '0 0 6px' }}>
-                    You haven't completed an assessment yet.
+                  <h4 style={{ font: "600 16px 'Space Grotesk'", color: '#F4F8F5', margin: '0 0 6px' }}>
+                    No Assessment Telemetry Yet
                   </h4>
-                  <p style={{ color: 'var(--muted)', fontSize: 13, maxWidth: 380, margin: '0 auto 18px' }}>
-                    Take your first AI student wellbeing assessment to evaluate your digital habits and generate your personal score.
+                  <p style={{ color: 'var(--muted)', fontSize: 13, maxWidth: 400, margin: '0 auto 20px', lineHeight: 1.6 }}>
+                    Complete your first 3-step student wellbeing questionnaire to generate your real-time routine distribution and AI prediction score.
                   </p>
                   <button
                     onClick={onStartAssessment}
                     className="btn-primary"
                     style={{ margin: '0 auto', fontSize: 13, padding: '10px 20px' }}
                   >
-                    Start Assessment <FiArrowRight size={14} />
+                    Start Student Assessment <FiArrowRight size={14} />
                   </button>
                 </div>
               )}

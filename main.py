@@ -30,6 +30,8 @@ except Exception as exc:
 
 top_countries = ['Other','India', 'USA', 'Canada', 'Australia', 'UK', 'Germany', 'Mexico', 'Turkey', 'France']
 
+STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
+
 app = FastAPI(title="MindSpace API", version="1.0.0")
 
 app.add_middleware(
@@ -273,8 +275,6 @@ def predict(data: StudentData, request: Request):
 
 
 # ── Serve React Frontend ───────────────────────────────────────────────────────
-STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
-
 if os.path.isdir(STATIC_DIR):
     app.mount("/assets", StaticFiles(directory=os.path.join(STATIC_DIR, "assets")), name="assets")
 

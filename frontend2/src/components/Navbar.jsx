@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import {
   FiMenu, FiX, FiUser, FiHome, FiInfo,
-  FiLogIn, FiUserPlus, FiLogOut, FiClipboard, FiBarChart2
+  FiLogIn, FiUserPlus, FiLogOut, FiClipboard, FiBarChart2, FiActivity
 } from 'react-icons/fi'
 import { LuBrain } from 'react-icons/lu'
 

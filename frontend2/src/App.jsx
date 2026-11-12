@@ -37,7 +37,11 @@ export default function App() {
     }
   })
   const [authToken, setAuthToken] = useState(() => {
-    return localStorage.getItem('mindspace_auth_token') || null
+    try {
+      return localStorage.getItem('mindspace_auth_token') || null
+    } catch {
+      return null
+    }
   })
 
   // ── View Routing State ─────────────────────────────────────────────────────

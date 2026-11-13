@@ -1,10 +1,13 @@
 /**
- * MindSpace – Professional Client-Side PDF Report Generator
+ * MindSpace – Premium Corporate & University Academic PDF Report Generator
  * Compliant with ISO 32000-1 / PDF 1.4
- * Zero external dependencies, offline-ready, emerald-mint styled.
+ * Pure client-side vector engine, offline-ready, university publication quality.
+ * Designed & Developed by TEJESH K
  */
 
-class PdfDocument {
+import { getSignalClassification } from './signalClassification'
+
+export class PdfDocument {
   constructor() {
     this.pages = []
     this.pageWidth = 595.28 // A4 width in points (72 DPI)
@@ -28,6 +31,7 @@ class PdfDocument {
   }
 
   hexToRgb(hex) {
+    if (!hex) return [0, 0, 0]
     let clean = hex.replace('#', '')
     if (clean.length === 3) {
       clean = clean.split('').map(c => c + c).join('')
@@ -50,7 +54,13 @@ class PdfDocument {
     this.currentPage.stream.push(`${r.toFixed(3)} ${g.toFixed(3)} ${b.toFixed(3)} RG`)
   }
 
-  drawRect(x, y, w, h, fill = true, stroke = false, fillColor = '#104638', strokeColor = '#70E1B5', lineWidth = 1) {
+  drawLine(x1, y1, x2, y2, color = '#E2E8F0', lineWidth = 1) {
+    if (lineWidth) this.currentPage.stream.push(`${lineWidth} w`)
+    this.setStrokeColor(color)
+    this.currentPage.stream.push(`${x1.toFixed(2)} ${y1.toFixed(2)} m ${x2.toFixed(2)} ${y2.toFixed(2)} l S`)
+  }
+
+  drawRect(x, y, w, h, fill = true, stroke = false, fillColor = '#FFFFFF', strokeColor = '#E2E8F0', lineWidth = 1) {
     if (lineWidth) this.currentPage.stream.push(`${lineWidth} w`)
     if (fill) this.setFillColor(fillColor)
     if (stroke) this.setStrokeColor(strokeColor)
@@ -58,10 +68,98 @@ class PdfDocument {
     this.currentPage.stream.push(`${x.toFixed(2)} ${y.toFixed(2)} ${w.toFixed(2)} ${h.toFixed(2)} re ${op}`)
   }
 
-  drawText(text, x, y, size = 10, bold = false, color = '#FFFFFF') {
+  drawRoundedRect(x, y, w, h, r = 6, fill = true, stroke = false, fillColor = '#FFFFFF', strokeColor = '#E2E8F0', lineWidth = 1) {
+    if (lineWidth) this.currentPage.stream.push(`${lineWidth} w`)
+    if (fill) this.setFillColor(fillColor)
+    if (stroke) this.setStrokeColor(strokeColor)
+    const k = r * 0.55228475
+    const s = [
+      `${(x + r).toFixed(2)} ${y.toFixed(2)} m`,
+      `${(x + w - r).toFixed(2)} ${y.toFixed(2)} l`,
+      `${(x + w - r + k).toFixed(2)} ${y.toFixed(2)} ${(x + w).toFixed(2)} ${(y + r - k).toFixed(2)} ${(x + w).toFixed(2)} ${(y + r).toFixed(2)} c`,
+      `${(x + w).toFixed(2)} ${(y + h - r).toFixed(2)} l`,
+      `${(x + w).toFixed(2)} ${(y + h - r + k).toFixed(2)} ${(x + w - r + k).toFixed(2)} ${(y + h).toFixed(2)} ${(x + w - r).toFixed(2)} ${(y + h).toFixed(2)} c`,
+      `${(x + r).toFixed(2)} ${(y + h).toFixed(2)} l`,
+      `${(x + r - k).toFixed(2)} ${(y + h).toFixed(2)} ${x.toFixed(2)} ${(y + h - r + k).toFixed(2)} ${x.toFixed(2)} ${(y + h - r).toFixed(2)} c`,
+      `${x.toFixed(2)} ${(y + r).toFixed(2)} l`,
+      `${x.toFixed(2)} ${(y + r - k).toFixed(2)} ${(x + r - k).toFixed(2)} ${y.toFixed(2)} ${(x + r).toFixed(2)} ${y.toFixed(2)} c`,
+    ]
+    const op = fill && stroke ? 'B' : fill ? 'f' : 'S'
+    s.push(op)
+    this.currentPage.stream.push(s.join(' '))
+  }
+
+  drawText(text, x, y, size = 10, bold = false, color = '#0F172A') {
     this.setFillColor(color)
     const font = bold ? '/F2' : '/F1'
     this.currentPage.stream.push(`BT ${font} ${size} Tf ${x.toFixed(2)} ${y.toFixed(2)} Td (${this.escape(text)}) Tj ET`)
+  }
+
+  drawWrappedText(text, x, y, maxWidth, lineHeight, size = 7.5, bold = false, color = '#334155') {
+    const words = String(text ?? '').split(' ')
+    let currentLine = ''
+    let curY = y
+    const avgCharWidth = (bold ? 0.55 : 0.50) * size
+
+    for (let i = 0; i < words.length; i++) {
+      const word = words[i]
+      const testLine = currentLine ? `${currentLine} ${word}` : word
+      const testWidth = testLine.length * avgCharWidth
+      if (testWidth > maxWidth && currentLine) {
+        this.drawText(currentLine, x, curY, size, bold, color)
+        curY -= lineHeight
+        currentLine = word
+      } else {
+        currentLine = testLine
+      }
+    }
+    if (currentLine) {
+      this.drawText(currentLine, x, curY, size, bold, color)
+      curY -= lineHeight
+    }
+    return curY
+  }
+
+  drawLogoEmblem(x, y, size = 36) {
+    // MindSpace deep emerald rounded badge
+    this.drawRoundedRect(x, y, size, size, 8, true, false, '#0D5C3A')
+
+    // Vector brain emblem in crisp white
+    const cx = x + size / 2
+    const cy = y + size / 2
+    const scale = size / 36
+
+    this.setStrokeColor('#FFFFFF')
+    this.currentPage.stream.push('1.2 w')
+
+    // Left hemisphere cerebral lobe
+    this.currentPage.stream.push(
+      `${(cx - 2 * scale).toFixed(2)} ${(cy + 10 * scale).toFixed(2)} m ` +
+      `${(cx - 8 * scale).toFixed(2)} ${(cy + 10 * scale).toFixed(2)} ${(cx - 12 * scale).toFixed(2)} ${(cy + 5 * scale).toFixed(2)} ${(cx - 10 * scale).toFixed(2)} ${(cy + 1 * scale).toFixed(2)} c ` +
+      `${(cx - 13 * scale).toFixed(2)} ${(cy - 2 * scale).toFixed(2)} ${(cx - 11 * scale).toFixed(2)} ${(cy - 7 * scale).toFixed(2)} ${(cx - 6 * scale).toFixed(2)} ${(cy - 8 * scale).toFixed(2)} c ` +
+      `${(cx - 4 * scale).toFixed(2)} ${(cy - 9 * scale).toFixed(2)} ${(cx - 2 * scale).toFixed(2)} ${(cy - 9 * scale).toFixed(2)} ${(cx - 2 * scale).toFixed(2)} ${(cy - 9 * scale).toFixed(2)} c S`
+    )
+
+    // Right hemisphere cerebral lobe (symmetric)
+    this.currentPage.stream.push(
+      `${(cx + 2 * scale).toFixed(2)} ${(cy + 10 * scale).toFixed(2)} m ` +
+      `${(cx + 8 * scale).toFixed(2)} ${(cy + 10 * scale).toFixed(2)} ${(cx + 12 * scale).toFixed(2)} ${(cy + 5 * scale).toFixed(2)} ${(cx + 10 * scale).toFixed(2)} ${(cy + 1 * scale).toFixed(2)} c ` +
+      `${(cx + 13 * scale).toFixed(2)} ${(cy - 2 * scale).toFixed(2)} ${(cx + 11 * scale).toFixed(2)} ${(cx - 7 * scale).toFixed(2)} ${(cx + 6 * scale).toFixed(2)} ${(cx - 8 * scale).toFixed(2)} c ` +
+      `${(cx + 4 * scale).toFixed(2)} ${(cy - 9 * scale).toFixed(2)} ${(cx + 2 * scale).toFixed(2)} ${(cy - 9 * scale).toFixed(2)} ${(cx + 2 * scale).toFixed(2)} ${(cy - 9 * scale).toFixed(2)} c S`
+    )
+
+    // Central fissure
+    this.currentPage.stream.push(
+      `${cx.toFixed(2)} ${(cy + 9 * scale).toFixed(2)} m ${cx.toFixed(2)} ${(cy - 8 * scale).toFixed(2)} l S`
+    )
+
+    // Neural horizontal bridges
+    this.currentPage.stream.push(
+      `${(cx - 6 * scale).toFixed(2)} ${(cy + 1 * scale).toFixed(2)} m ${(cx - 2 * scale).toFixed(2)} ${(cy + 1 * scale).toFixed(2)} l S`
+    )
+    this.currentPage.stream.push(
+      `${(cx + 6 * scale).toFixed(2)} ${(cy + 1 * scale).toFixed(2)} m ${(cx + 2 * scale).toFixed(2)} ${(cy + 1 * scale).toFixed(2)} l S`
+    )
   }
 
   buildUint8Array() {
@@ -121,129 +219,232 @@ class PdfDocument {
 export function generateAndDownloadReport({ formData, score, timestamp }) {
   const doc = new PdfDocument()
   const displayScore = Number(score).toFixed(2)
-  const reportDate = timestamp || new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
+  const reportDate = timestamp || new Date().toLocaleString('en-US', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  })
+
+  const signal = getSignalClassification(score)
+
+  // Status-specific badges compliant with official university design
+  const signalBadgeBg = signal.status === 'STRONG' ? '#ECFDF5' : signal.status === 'MEDIUM' ? '#FFFBEB' : '#FEF2F2'
+  const signalBadgeBorder = signal.status === 'STRONG' ? '#A7F3D0' : signal.status === 'MEDIUM' ? '#FDE68A' : '#FECACA'
+  const signalTextColor = signal.status === 'STRONG' ? '#047857' : signal.status === 'MEDIUM' ? '#B45309' : '#B91C1C'
+  const signalMeterColor = signal.status === 'STRONG' ? '#059669' : signal.status === 'MEDIUM' ? '#D97706' : '#DC2626'
+
+  // Geometry: A4 width = 595.28, margin = 38pt, contentWidth = 519.28pt
+  const marginX = 38
+  const contentWidth = 519.28
 
   // ==========================================
-  // PAGE 1: Header, Result, and Assessment Details
+  // PAGE 1: Header, Score, Table & Data Assurance
   // ==========================================
 
-  // Emerald Banner Header
-  doc.drawRect(35, 745, 525, 70, true, true, '#092C24', '#1DB87A', 1.5)
-  doc.drawText('MindSpace', 55, 785, 22, true, '#F5FFF9')
-  doc.drawText('AI-POWERED STUDENT WELLBEING ASSESSMENT REPORT', 55, 765, 9, true, '#70E1B5')
-  doc.drawText(`Date & Time: ${reportDate}`, 360, 765, 8.5, false, '#C0D8CD')
+  // 1. Header with Original MindSpace Vector Logo Emblem
+  doc.drawLogoEmblem(marginX, 752, 36)
 
-  // SECTION 2 (TOP): Prediction Result Highlight Box
-  doc.drawRect(35, 630, 525, 105, true, true, '#104638', '#70E1B5', 1)
-  doc.drawText('SECTION 1: PREDICTED MENTAL HEALTH SCORE', 50, 715, 11, true, '#70E1B5')
-  
-  // Score Big Badge
-  doc.drawRect(50, 645, 120, 55, true, true, '#092C24', '#1DB87A', 1.2)
-  doc.drawText(displayScore, 65, 672, 26, true, '#F5FFF9')
-  doc.drawText('OUT OF 10.0', 70, 654, 8, true, '#70E1B5')
+  // Logo Brand Typography
+  doc.drawText('MindSpace', marginX + 44, 774, 15, true, '#0F172A')
+  doc.drawText('STUDENT WELLBEING PLATFORM', marginX + 44, 762, 6.5, true, '#0D5C3A')
 
-  // Explanation text
-  doc.drawText('Model: Random Forest Regressor (Trained ML Model)', 185, 700, 9.5, true, '#F5FFF9')
-  doc.drawText('Actual Output Range: 1.0 to 10.0 (Dataset sample range: 3.6 to 9.4, Mean: 6.23)', 185, 686, 8.5, false, '#C0D8CD')
-  doc.drawText('Higher score indicates stronger self-reported mental wellbeing; lower indicates elevated strain.', 185, 673, 8, false, '#C0D8CD')
-  doc.drawText('Verified Machine Learning regression prediction based on 5,000 student survey records.', 185, 660, 8, false, '#70E1B5')
-  doc.drawText('Clinical Notice: This is an ML wellbeing estimate, not a medical or psychiatric diagnosis.', 185, 646, 8, true, '#F5C842')
+  // Document Title & Subtitle
+  doc.drawText('STUDENT WELLBEING ASSESSMENT REPORT', marginX + 175, 774, 10.5, true, '#0F172A')
+  doc.drawText('AI-Powered Student Wellbeing Platform • Official Report', marginX + 175, 762, 7.5, false, '#64748B')
 
-  // SECTION 1: Student Assessment Details (Table of 12 fields)
-  doc.drawRect(35, 595, 525, 25, true, false, '#0d3329')
-  doc.drawText('SECTION 2: STUDENT ASSESSMENT DETAILS (ALL SUBMITTED FIELDS)', 50, 603, 11, true, '#70E1B5')
+  // Top-Right Assessment Metadata
+  doc.drawText('ASSESSMENT DATE', 440, 776, 6.5, true, '#64748B')
+  doc.drawText(reportDate, 440, 765, 7.5, true, '#0F172A')
+  doc.drawText('DOC REF: MS-2026-VAL', 440, 755, 6.5, true, '#0D5C3A')
+
+  // Thin emerald divider
+  doc.drawLine(marginX, 742, marginX + contentWidth, 742, '#0D5C3A', 1.5)
+
+  // 2. Section 1: Score & SIGNAL Presentation Card
+  const scoreCardY = 618
+  const scoreCardH = 112
+  doc.drawRoundedRect(marginX, scoreCardY, contentWidth, scoreCardH, 10, true, true, '#F8FAFC', '#E2E8F0', 1)
+  // Left deep emerald accent stripe
+  doc.drawRoundedRect(marginX, scoreCardY, 4.5, scoreCardH, 2, true, false, '#0D5C3A')
+
+  // Left Column: Score Numerical Presentation & Subtle Progress Meter
+  doc.drawText('PREDICTED MENTAL HEALTH SCORE', marginX + 16, scoreCardY + 92, 7, true, '#64748B')
+  doc.drawText(displayScore, marginX + 16, scoreCardY + 54, 30, true, '#0D5C3A')
+  doc.drawText('/ 10.0', marginX + 90, scoreCardY + 58, 11, true, '#64748B')
+
+  // Subtle score meter bar
+  const meterWidth = 112
+  const meterHeight = 5
+  doc.drawRoundedRect(marginX + 16, scoreCardY + 40, meterWidth, meterHeight, 2.5, true, false, '#E2E8F0')
+  const clampedRatio = Math.max(0.1, Math.min(1.0, Number(score) / 10))
+  doc.drawRoundedRect(marginX + 16, scoreCardY + 40, meterWidth * clampedRatio, meterHeight, 2.5, true, false, signalMeterColor)
+  doc.drawText('Scale: 1.0 (Low) - 10.0 (High)', marginX + 16, scoreCardY + 26, 6.8, false, '#64748B')
+
+  // Vertical separator line
+  doc.drawLine(marginX + 142, scoreCardY + 12, marginX + 142, scoreCardY + scoreCardH - 12, '#E2E8F0', 0.75)
+
+  // Right Column: Section Header & SIGNAL Evaluation
+  const rightColX = marginX + 156
+  doc.drawText('SECTION 1: PREDICTED WELLBEING SCORE & SIGNAL EVALUATION', rightColX, scoreCardY + 92, 7.8, true, '#0D5C3A')
+
+  // SIGNAL Status Badge
+  const badgeW = 100
+  const badgeH = 19
+  const badgeX = marginX + contentWidth - badgeW - 12
+  doc.drawRoundedRect(badgeX, scoreCardY + 83, badgeW, badgeH, 5, true, true, signalBadgeBg, signalBadgeBorder, 0.75)
+  doc.drawText(signal.label, badgeX + 10, scoreCardY + 89, 7.8, true, signalTextColor)
+
+  // Concise interpretation text wrapped cleanly
+  doc.drawWrappedText(signal.description, rightColX, scoreCardY + 68, 335, 12, 7.8, false, '#1E293B')
+
+  // Model & baseline telemetry specifications
+  doc.drawText('Algorithm: Random Forest Regressor (Trained ML Model, 100 Estimators Pipeline)', rightColX, scoreCardY + 36, 7.2, true, '#475569')
+  doc.drawText('Output Scale: 1.0 to 10.0 • Sample Dataset Mean: 6.23 • Evaluated on 12 Input Features', rightColX, scoreCardY + 24, 7, false, '#64748B')
+  doc.drawText('Thresholds: Strong (>= 7.0) | Medium (5.0 - 6.99) | Weak (< 5.0)', rightColX, scoreCardY + 12, 7, false, '#64748B')
+
+  // 3. Section 2: Student Assessment Telemetry (12 Submitted Parameters)
+  const tableTitleY = 598
+  doc.drawText('SECTION 2: STUDENT ASSESSMENT TELEMETRY (12 SUBMITTED PARAMETERS)', marginX, tableTitleY, 8.8, true, '#0D5C3A')
+  doc.drawText('Direct self-reported behavioral, academic, and psychological lifestyle inputs evaluated by the model', marginX, tableTitleY - 11, 7.2, false, '#64748B')
+
+  // Table Columns Header
+  const tableTopY = 568
+  const tableRowH = 24.5
+  doc.drawRoundedRect(marginX, tableTopY, contentWidth, 20, 6, true, false, '#0D5C3A')
+  doc.drawText('#', marginX + 10, tableTopY + 6, 7.5, true, '#FFFFFF')
+  doc.drawText('ASSESSMENT PARAMETER', marginX + 34, tableTopY + 6, 7.5, true, '#FFFFFF')
+  doc.drawText('REPORTED STUDENT VALUE', marginX + 225, tableTopY + 6, 7.5, true, '#FFFFFF')
+  doc.drawText('TELEMETRY DOMAIN', marginX + 385, tableTopY + 6, 7.5, true, '#FFFFFF')
 
   const fields = [
-    { num: '1', label: 'Age', value: `${formData.age} years` },
-    { num: '2', label: 'Gender', value: String(formData.gender) },
-    { num: '3', label: 'Country', value: String(formData.country) },
-    { num: '4', label: 'Academic Level', value: String(formData.academic_level) },
-    { num: '5', label: 'Most Used Platform', value: String(formData.most_used_platform) },
-    { num: '6', label: 'Purpose of Use', value: String(formData.purpose_of_use) },
-    { num: '7', label: 'Average Daily Usage Hours', value: `${formData.avg_daily_usage_hours} hrs/day` },
-    { num: '8', label: 'Daily Phone Unlocks', value: `${formData.daily_unlocks} unlocks/day` },
-    { num: '9', label: 'Study Hours Per Day', value: `${formData.study_hours} hrs/day` },
-    { num: '10', label: 'Physical Activity Hours', value: `${formData.physical_activity_hours} hrs/day` },
-    { num: '11', label: 'Sleep Hours Per Night', value: `${formData.sleep_hours_per_night} hrs/night` },
-    { num: '12', label: 'Perceived Stress Level', value: String(formData.stress_level) },
+    { num: '1', label: 'Age', value: `${formData.age} years`, domain: 'Student Demographic' },
+    { num: '2', label: 'Gender', value: String(formData.gender), domain: 'Demographic Indicator' },
+    { num: '3', label: 'Country', value: String(formData.country), domain: 'Geographic Baseline' },
+    { num: '4', label: 'Academic Level', value: String(formData.academic_level), domain: 'Academic Stage' },
+    { num: '5', label: 'Most Used Platform', value: String(formData.most_used_platform), domain: 'Primary Digital Channel' },
+    { num: '6', label: 'Purpose of Use', value: String(formData.purpose_of_use), domain: 'Online Engagement' },
+    { num: '7', label: 'Average Daily Usage Hours', value: `${formData.avg_daily_usage_hours} hrs/day`, domain: 'Digital Screen Time' },
+    { num: '8', label: 'Daily Phone Unlocks', value: `${formData.daily_unlocks} unlocks/day`, domain: 'Device Interaction Frequency' },
+    { num: '9', label: 'Study Hours Per Day', value: `${formData.study_hours} hrs/day`, domain: 'Academic Focus Duration' },
+    { num: '10', label: 'Physical Activity Hours', value: `${formData.physical_activity_hours} hrs/day`, domain: 'Physical Activity & Movement' },
+    { num: '11', label: 'Sleep Hours Per Night', value: `${formData.sleep_hours_per_night} hrs/night`, domain: 'Restorative Sleep' },
+    { num: '12', label: 'Perceived Stress Level', value: String(formData.stress_level), domain: 'Psychological State' },
   ]
 
-  let tableY = 565
-  const rowHeight = 22
+  let currentRowY = tableTopY - tableRowH
   for (let i = 0; i < fields.length; i++) {
     const f = fields[i]
-    const isEven = i % 2 === 0
-    const rowBg = isEven ? '#104638' : '#0e3d31'
-    doc.drawRect(35, tableY, 525, rowHeight, true, true, rowBg, 'rgba(112,225,181,.15)', 0.5)
+    const isEven = i % 2 === 1
+    const rowBg = isEven ? '#F8FAFC' : '#FFFFFF'
 
-    doc.drawText(`${f.num}.`, 45, tableY + 7, 8.5, true, '#70E1B5')
-    doc.drawText(f.label, 65, tableY + 7, 8.5, true, '#F5FFF9')
-    doc.drawText(f.value, 320, tableY + 7, 8.5, false, '#B7F5D8')
+    // Row background & bottom separator
+    doc.drawRect(marginX, currentRowY, contentWidth, tableRowH, true, false, rowBg)
+    doc.drawLine(marginX, currentRowY, marginX + contentWidth, currentRowY, '#E2E8F0', 0.5)
 
-    tableY -= rowHeight
+    doc.drawText(`${f.num}.`, marginX + 10, currentRowY + 8, 7.5, true, '#64748B')
+    doc.drawText(f.label, marginX + 34, currentRowY + 8, 7.8, true, '#1E293B')
+    doc.drawText(f.value, marginX + 225, currentRowY + 8, 8.2, true, '#0D5C3A')
+    doc.drawText(f.domain, marginX + 385, currentRowY + 8, 7.2, false, '#64748B')
+
+    currentRowY -= tableRowH
   }
 
-  // Summary box on bottom of Page 1
-  tableY -= 15
-  doc.drawRect(35, tableY - 45, 525, 55, true, true, '#092C24', '#1DB87A', 1)
-  doc.drawText('ASSESSMENT INTEGRITY VERIFICATION', 50, tableY - 12, 9.5, true, '#70E1B5')
-  doc.drawText('All 12 inputs match the FastAPI schema. Features were transformed via scikit-learn OneHotEncoder', 50, tableY - 26, 8, false, '#C0D8CD')
-  doc.drawText('and OrdinalEncoder pipeline before scoring by the trained Random Forest model.', 50, tableY - 38, 8, false, '#C0D8CD')
+  // 4. Assessment Integrity & Model Pipeline Assurance Card (Bottom of Page 1)
+  const assuranceY = currentRowY - 14
+  const assuranceH = 88
+  doc.drawRoundedRect(marginX, assuranceY - assuranceH + 20, contentWidth, assuranceH, 8, true, true, '#F0FDF4', '#A7F3D0', 1)
+  doc.drawRoundedRect(marginX, assuranceY - assuranceH + 20, 4, assuranceH, 2, true, false, '#0D5C3A')
 
-  // Page 1 Footer
-  doc.drawRect(35, 30, 525, 20, false, true, null, '#1DB87A', 0.5)
-  doc.drawText('MindSpace - AI Student Wellbeing Platform', 40, 36, 8, false, '#7aa598')
-  doc.drawText('Page 1 of 2', 510, 36, 8, false, '#7aa598')
+  doc.drawText('ASSESSMENT INTEGRITY & REPRODUCIBILITY VERIFICATION', marginX + 16, assuranceY + 4, 8, true, '#0D5C3A')
+  doc.drawText('• Schema Compliance: All 12 inputs match the FastAPI Pydantic schema validation without missing or null values.', marginX + 16, assuranceY - 11, 7.2, false, '#334155')
+  doc.drawText('• Feature Transformations: Preprocessed via OneHotEncoder for platform/purpose and OrdinalEncoder for stress categories.', marginX + 16, assuranceY - 24, 7.2, false, '#334155')
+  doc.drawText('• Scoring Determinism: Scored reproducibly by the trained Random Forest regressor without stochastic drift.', marginX + 16, assuranceY - 37, 7.2, false, '#334155')
+  doc.drawText('• Educational Classification: Output mapped to three standardized SIGNAL levels for clear student self-reflection.', marginX + 16, assuranceY - 50, 7.2, false, '#334155')
+  doc.drawText('• Non-Clinical Scope: Scores represent routine wellness indicators and do not replace professional psychological diagnosis.', marginX + 16, assuranceY - 63, 7.2, true, '#047857')
+
+  // 5. Page 1 Footer
+  doc.drawLine(marginX, 50, marginX + contentWidth, 50, '#0D5C3A', 0.75)
+  doc.drawText('MindSpace – AI Student Wellbeing Platform', marginX, 36, 7.5, true, '#64748B')
+  doc.drawText('Designed & Developed by TEJESH K', 230, 36, 7.5, true, '#0D5C3A')
+  doc.drawText('Page 1 of 2', marginX + contentWidth - 45, 36, 7.5, false, '#64748B')
 
   // ==========================================
-  // PAGE 2: Assessment Summary & Wellbeing Suggestions
+  // PAGE 2: Assessment Summary & Suggestions
   // ==========================================
   doc.addPage()
 
-  // Top header on Page 2
-  doc.drawRect(35, 775, 525, 40, true, true, '#092C24', '#1DB87A', 1)
-  doc.drawText('MindSpace - Student Wellbeing Report', 50, 792, 13, true, '#F5FFF9')
-  doc.drawText(`Score: ${displayScore} / 10.0`, 450, 792, 11, true, '#70E1B5')
+  // 1. Page 2 Header with Mini Logo
+  doc.drawLogoEmblem(marginX, 766, 24)
+  doc.drawText('MindSpace', marginX + 32, 778, 11, true, '#0F172A')
+  doc.drawText('STUDENT WELLBEING ASSESSMENT REPORT • EXECUTIVE SUMMARY', marginX + 32, 768, 6.8, true, '#0D5C3A')
 
-  // SECTION 3: Assessment Summary
-  doc.drawRect(35, 735, 525, 25, true, false, '#0d3329')
-  doc.drawText('SECTION 3: ASSESSMENT SUMMARY', 50, 743, 11, true, '#70E1B5')
+  // Right Running Status
+  doc.drawText(`Score: ${displayScore} / 10.0 • ${signal.label}`, 380, 778, 7.8, true, '#0D5C3A')
+  doc.drawText(`Report Date: ${reportDate}`, 380, 768, 7, false, '#64748B')
+
+  doc.drawLine(marginX, 754, marginX + contentWidth, 754, '#0D5C3A', 1)
+
+  // 2. Section 3: Assessment Summary (5 Neatly Arranged Cards)
+  doc.drawText('SECTION 3: ASSESSMENT SUMMARY & BEHAVIOURAL TELEMETRY', marginX, 738, 9, true, '#0D5C3A')
+  doc.drawText('Synthesis of lifestyle patterns, screen engagement, and daily rest indicators', marginX, 727, 7.2, false, '#64748B')
 
   const summaries = [
     {
-      title: 'Digital Habits',
-      text: `Primary platform is ${formData.most_used_platform} used mainly for ${formData.purpose_of_use}. Student averages ${formData.avg_daily_usage_hours} hours of screen usage daily with approximately ${formData.daily_unlocks} unlocks.`
+      title: '1. Digital Habits',
+      text: `Primary platform is ${formData.most_used_platform} used mainly for ${formData.purpose_of_use}. Student averages ${formData.avg_daily_usage_hours} hours of screen usage daily with approximately ${formData.daily_unlocks} device unlocks per day.`
     },
     {
-      title: 'Academic Lifestyle',
-      text: `Currently enrolled at the ${formData.academic_level} level, dedicating ${formData.study_hours} hours daily to coursework and academic study.`
+      title: '2. Academic Lifestyle',
+      text: `Currently enrolled at the ${formData.academic_level} level, dedicating ${formData.study_hours} hours daily to coursework, exam revision, and dedicated academic preparation.`
     },
     {
-      title: 'Sleep and Rest',
-      text: `Average sleep duration is ${formData.sleep_hours_per_night} hours per night. Rest sufficiency plays an influential role in cognitive retention and daily mood stability.`
+      title: '3. Sleep and Rest',
+      text: `Average sleep duration is ${formData.sleep_hours_per_night} hours per night. Rest sufficiency plays an influential role in cognitive retention, memory consolidation, and daily mood stability.`
     },
     {
-      title: 'Physical Activity',
-      text: `Reported physical activity is ${formData.physical_activity_hours} hours daily, contributing to cardiovascular health, physical resilience, and reduced muscular fatigue.`
+      title: '4. Physical Activity',
+      text: `Reported physical activity is ${formData.physical_activity_hours} hours daily, contributing to cardiovascular health, physical stamina, cognitive alertness, and reduced muscular fatigue.`
     },
-    {
-      title: 'Perceived Stress',
-      text: `Self-reported current stress level is ${formData.stress_level}. Balanced workload and recovery intervals help prevent sustained elevated stress.`
-    }
   ]
 
-  let sumY = 705
-  for (const s of summaries) {
-    doc.drawRect(35, sumY - 10, 525, 30, true, true, '#104638', 'rgba(112,225,181,.18)', 0.5)
-    doc.drawText(s.title + ':', 48, sumY + 5, 9, true, '#70E1B5')
-    doc.drawText(s.text, 145, sumY + 5, 7.8, false, '#F5FFF9')
-    sumY -= 36
+  // Render 2x2 grid for Cards 1 to 4
+  const cardW = 253
+  const cardH = 68
+  const gapX = 13
+
+  // Row 1: Cards 1 and 2
+  const row1Y = 648
+  for (let i = 0; i < 2; i++) {
+    const s = summaries[i]
+    const cX = marginX + i * (cardW + gapX)
+    doc.drawRoundedRect(cX, row1Y, cardW, cardH, 7, true, true, '#F8FAFC', '#E2E8F0', 0.75)
+    doc.drawRoundedRect(cX, row1Y, 3, cardH, 1.5, true, false, '#0D5C3A')
+    doc.drawText(s.title, cX + 12, row1Y + 52, 8.2, true, '#0D5C3A')
+    doc.drawWrappedText(s.text, cX + 12, row1Y + 38, cardW - 24, 11, 7.2, false, '#334155')
   }
 
-  // SECTION 4: General Wellbeing Suggestions
-  sumY -= 5
-  doc.drawRect(35, sumY, 525, 25, true, false, '#0d3329')
-  doc.drawText('SECTION 4: GENERAL STUDENT WELLBEING SUGGESTIONS', 50, sumY + 8, 11, true, '#70E1B5')
+  // Row 2: Cards 3 and 4
+  const row2Y = 570
+  for (let i = 2; i < 4; i++) {
+    const s = summaries[i]
+    const cX = marginX + (i - 2) * (cardW + gapX)
+    doc.drawRoundedRect(cX, row2Y, cardW, cardH, 7, true, true, '#F8FAFC', '#E2E8F0', 0.75)
+    doc.drawRoundedRect(cX, row2Y, 3, cardH, 1.5, true, false, '#0D5C3A')
+    doc.drawText(s.title, cX + 12, row2Y + 52, 8.2, true, '#0D5C3A')
+    doc.drawWrappedText(s.text, cX + 12, row2Y + 38, cardW - 24, 11, 7.2, false, '#334155')
+  }
+
+  // Row 3: Card 5 (Perceived Stress, full width)
+  const card5Y = 508
+  const card5H = 52
+  doc.drawRoundedRect(marginX, card5Y, contentWidth, card5H, 7, true, true, '#F8FAFC', '#E2E8F0', 0.75)
+  doc.drawRoundedRect(marginX, card5Y, 3, card5H, 1.5, true, false, '#0D5C3A')
+  doc.drawText('5. Perceived Stress', marginX + 12, card5Y + 36, 8.2, true, '#0D5C3A')
+  const stressText = `Self-reported current stress level is ${formData.stress_level}. Balanced workload allocation, regular recovery intervals, and structured peer study support help mitigate sustained academic strain and prevent cognitive burnout.`
+  doc.drawWrappedText(stressText, marginX + 12, card5Y + 22, contentWidth - 24, 11, 7.2, false, '#334155')
+
+  // 3. Section 4: Student Wellbeing Suggestions (6 Numbered Items)
+  doc.drawText('SECTION 4: EVIDENCE-BASED STUDENT WELLBEING SUGGESTIONS', marginX, 486, 9, true, '#0D5C3A')
+  doc.drawText('Practical, actionable recommendations tailored for university lifestyle balance', marginX, 475, 7.2, false, '#64748B')
 
   const tips = [
     {
@@ -272,26 +473,41 @@ export function generateAndDownloadReport({ formData, score, timestamp }) {
     }
   ]
 
-  let tipY = sumY - 22
+  let tipStartY = 430
+  const tipH = 35
+  const tipGap = 5
   for (let i = 0; i < tips.length; i++) {
     const t = tips[i]
-    doc.drawRect(35, tipY - 8, 525, 26, true, true, '#0e3d31', 'rgba(112,225,181,.12)', 0.5)
-    doc.drawText(`${i + 1}. ${t.title}:`, 48, tipY + 4, 8.5, true, '#B7F5D8')
-    doc.drawText(t.desc, 48, tipY - 5, 7.2, false, '#C0D8CD')
-    tipY -= 32
+    const cY = tipStartY - i * (tipH + tipGap)
+
+    // Suggestion container card
+    doc.drawRoundedRect(marginX, cY, contentWidth, tipH, 6, true, true, '#FFFFFF', '#E2E8F0', 0.75)
+
+    // Subtle green numbering badge
+    doc.drawRoundedRect(marginX + 8, cY + 8.5, 18, 18, 4, true, true, '#ECFDF5', '#A7F3D0', 0.5)
+    doc.drawText(String(i + 1), marginX + 14.5, cY + 14, 7.8, true, '#0D5C3A')
+
+    // Heading & explanatory body
+    doc.drawText(t.title, marginX + 34, cY + 21, 8.2, true, '#0F172A')
+    doc.drawText(t.desc, marginX + 34, cY + 10, 7.1, false, '#334155')
   }
 
-  // Final Educational Disclaimer Box
-  tipY -= 5
-  doc.drawRect(35, tipY - 32, 525, 36, true, true, '#092C24', '#F5C842', 1)
-  doc.drawText('IMPORTANT EDUCATIONAL DISCLAIMER', 48, tipY - 10, 8.5, true, '#F5C842')
-  doc.drawText('MindSpace provides algorithmically inferred scores based strictly on self-reported inputs. This report is for educational', 48, tipY - 20, 7.2, false, '#C0D8CD')
-  doc.drawText('and self-reflection purposes only and does not constitute a clinical diagnosis or psychiatric evaluation.', 48, tipY - 29, 7.2, false, '#C0D8CD')
+  // 4. Educational Disclaimer Card (Bottom of Page 2)
+  const disclaimerY = 126
+  const disclaimerH = 62
+  doc.drawRoundedRect(marginX, disclaimerY, contentWidth, disclaimerH, 8, true, true, '#FFFBEB', '#FDE68A', 1)
+  doc.drawRoundedRect(marginX, disclaimerY, 3.5, disclaimerH, 1.5, true, false, '#D97706')
 
-  // Page 2 Footer
-  doc.drawRect(35, 30, 525, 20, false, true, null, '#1DB87A', 0.5)
-  doc.drawText('MindSpace - AI Student Wellbeing Platform', 40, 36, 8, false, '#7aa598')
-  doc.drawText('Page 2 of 2', 510, 36, 8, false, '#7aa598')
+  doc.drawText('IMPORTANT EDUCATIONAL & CLINICAL DISCLAIMER', marginX + 14, disclaimerY + 45, 8, true, '#B45309')
+  doc.drawText('• Algorithmic Scope: MindSpace generates wellbeing scores based strictly on self-reported survey inputs.', marginX + 14, disclaimerY + 32, 7.2, false, '#78350F')
+  doc.drawText('• Non-Diagnostic: This report is designed solely for self-reflection and academic habit awareness; it does not constitute medical diagnosis.', marginX + 14, disclaimerY + 21, 7.2, false, '#78350F')
+  doc.drawText('• Professional Support: If you experience persistent distress, please consult university wellness counselors or healthcare professionals.', marginX + 14, disclaimerY + 10, 7.2, true, '#92400E')
+
+  // 5. Page 2 Footer
+  doc.drawLine(marginX, 50, marginX + contentWidth, 50, '#0D5C3A', 0.75)
+  doc.drawText('MindSpace – AI Student Wellbeing Platform', marginX, 36, 7.5, true, '#64748B')
+  doc.drawText('Designed & Developed by TEJESH K', 230, 36, 7.5, true, '#0D5C3A')
+  doc.drawText('Page 2 of 2', marginX + contentWidth - 45, 36, 7.5, false, '#64748B')
 
   // Build bytes and trigger browser download
   const bytes = doc.buildUint8Array()
@@ -305,4 +521,3 @@ export function generateAndDownloadReport({ formData, score, timestamp }) {
   document.body.removeChild(link)
   setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
-

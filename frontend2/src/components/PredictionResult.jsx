@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   FiRefreshCw, FiCopy, FiCheck, FiDownload,
-  FiActivity, FiArrowRight, FiCalendar, FiClock
+  FiActivity, FiArrowRight, FiCalendar, FiClock,
+  FiCheckCircle, FiAlertTriangle, FiAlertCircle, FiInfo
 } from 'react-icons/fi'
 import { LuBrain, LuSparkles } from 'react-icons/lu'
 import { MdOutlineHealthAndSafety } from 'react-icons/md'
 import { generateAndDownloadReport } from '../utils/generatePdfReport'
+import { getSignalClassification } from '../utils/signalClassification'
 
 function useCounter(target, duration = 1200) {
   const ref = useRef(null)
@@ -120,6 +122,112 @@ function StatChip({ label, value }) {
     }}>
       <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4 }}>{label}</div>
       <div style={{ font: "600 14px 'Space Grotesk'", color: '#F4F8F5' }}>{value}</div>
+    </div>
+  )
+}
+
+function SignalCard({ score }) {
+  const signal = getSignalClassification(score)
+
+  const StatusIcon = signal.status === 'STRONG'
+    ? FiCheckCircle
+    : signal.status === 'MEDIUM'
+      ? FiAlertTriangle
+      : FiAlertCircle
+
+  return (
+    <div
+      style={{
+        marginTop: 18,
+        padding: '16px 20px',
+        borderRadius: 14,
+        background: signal.bg,
+        border: `1px solid ${signal.border}`,
+        boxShadow: signal.glow,
+        transition: 'all .25s ease',
+      }}
+    >
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: 10,
+        marginBottom: 10,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 36,
+            height: 36,
+            borderRadius: 10,
+            display: 'grid',
+            placeItems: 'center',
+            background: `${signal.color}22`,
+            color: signal.color,
+            fontSize: 20,
+            boxShadow: `0 0 14px ${signal.color}35`,
+            flexShrink: 0,
+          }}>
+            <StatusIcon />
+          </div>
+          <div>
+            <div style={{
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '1.5px',
+              textTransform: 'uppercase',
+              color: 'var(--muted)',
+            }}>
+              SIGNAL Evaluation
+            </div>
+            <div style={{
+              font: "700 clamp(16px, 2.5vw, 19px) 'Space Grotesk'",
+              color: signal.color,
+              letterSpacing: '-0.3px',
+            }}>
+              {signal.label}
+            </div>
+          </div>
+        </div>
+
+        <span style={{
+          fontSize: 11,
+          fontWeight: 700,
+          padding: '5px 12px',
+          borderRadius: 999,
+          background: `${signal.color}15`,
+          border: `1px solid ${signal.border}`,
+          color: signal.color,
+          letterSpacing: '0.4px',
+        }}>
+          {signal.tag}
+        </span>
+      </div>
+
+      <p style={{
+        margin: '0 0 12px',
+        fontSize: 13.5,
+        lineHeight: 1.65,
+        color: '#F4F8F5',
+      }}>
+        {signal.description}
+      </p>
+
+      <div style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: 7,
+        fontSize: 11,
+        color: 'var(--muted)',
+        paddingTop: 10,
+        borderTop: '1px solid rgba(130, 210, 175, 0.12)',
+        lineHeight: 1.5,
+      }}>
+        <FiInfo size={14} style={{ color: signal.color, marginTop: 1, flexShrink: 0 }} />
+        <span>
+          Preliminary educational indicator based on predicted score thresholds (&lt;5.0 Weak, 5.0–6.99 Medium, &ge;7.0 Strong). Not a clinical or psychiatric diagnosis.
+        </span>
+      </div>
     </div>
   )
 }
@@ -263,11 +371,15 @@ export default function PredictionResult({ score, formData, timestamp, onReset, 
                   Model Evaluation: {numericScore.toFixed(2)} / 10.0
                 </div>
                 <ScoreBar score={numericScore} />
+
+                {/* SIGNAL Evaluation Display directly below Model Evaluation */}
+                <SignalCard score={numericScore} />
+
                 <p style={{
                   fontSize: 12,
                   color: 'var(--muted)',
                   lineHeight: 1.65,
-                  marginTop: 12,
+                  marginTop: 14,
                 }}>
                   Higher values indicate positive equilibrium across sleep, physical activity, and moderate screen time. Lower values correlate with high unlock counts, sleep deficit, and elevated academic stress.
                 </p>

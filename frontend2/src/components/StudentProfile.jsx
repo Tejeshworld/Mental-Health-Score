@@ -8,6 +8,7 @@ import {
 import { LuBrain, LuGraduationCap, LuSparkles } from 'react-icons/lu'
 import { ACADEMIC_CLASSES } from './SignUp.jsx'
 import API_URL from '../apiConfig.js'
+import { getSignalClassification } from '../utils/signalClassification'
 
 export default function StudentProfile({ user, token, onSignOut, onStartAssessment, onUpdateUser }) {
   const [profile, setProfile] = useState(user)
@@ -308,20 +309,39 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
 
         {/* 4 Stat Overview Cards */}
         <div className="profile-stats-grid" style={{ marginBottom: 30 }}>
-          {/* Card 1: Latest Score */}
+          {/* Card 1: Latest Score & SIGNAL */}
           <div className="glass" style={{ padding: 'clamp(14px, 3vw, 20px)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: '#36D6A0', marginBottom: 8 }}>
-              <FiTrendingUp size={16} />
-              <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                Latest Score
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 7, color: '#36D6A0' }}>
+                <FiTrendingUp size={16} />
+                <span style={{ fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                  Latest Score
+                </span>
+              </div>
+              {latestScore !== null && (() => {
+                const sig = getSignalClassification(latestScore)
+                return (
+                  <span style={{
+                    padding: '3px 8px',
+                    borderRadius: 6,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    background: sig.bg,
+                    border: `1px solid ${sig.border}`,
+                    color: sig.color,
+                    letterSpacing: '0.4px',
+                  }}>
+                    {sig.label}
+                  </span>
+                )
+              })()}
             </div>
-            <div style={{ font: "700 clamp(22px, 3vw, 28px) 'Space Grotesk'", color: '#36D6A0' }}>
+            <div style={{ font: "700 clamp(22px, 3vw, 28px) 'Space Grotesk'", color: latestScore !== null ? getSignalClassification(latestScore).color : '#36D6A0' }}>
               {latestScore !== null ? `${latestScore.toFixed(2)}` : '– –'}
               {latestScore !== null && <span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}> / 10.0</span>}
             </div>
             <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
-              {latestScore !== null ? 'Algorithm inference' : 'No assessment taken yet'}
+              {latestScore !== null ? getSignalClassification(latestScore).description : 'No assessment taken yet'}
             </div>
           </div>
 
@@ -781,6 +801,7 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                         <th style={{ padding: '10px 8px' }}>Screen Time</th>
                         <th style={{ padding: '10px 8px' }}>Stress</th>
                         <th style={{ padding: '10px 8px', textAlign: 'right' }}>Score</th>
+                        <th style={{ padding: '10px 8px', textAlign: 'right' }}>Signal Evaluation</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -818,6 +839,27 @@ export default function StudentProfile({ user, token, onSignOut, onStartAssessme
                           </td>
                           <td style={{ padding: '12px 8px', textAlign: 'right', fontWeight: 700, color: '#36D6A0' }}>
                             {Number(item.predicted_score).toFixed(2)}
+                          </td>
+                          <td style={{ padding: '12px 8px', textAlign: 'right' }}>
+                            {(() => {
+                              const sig = getSignalClassification(item.predicted_score)
+                              return (
+                                <span style={{
+                                  padding: '3px 8px',
+                                  borderRadius: 6,
+                                  fontSize: 10.5,
+                                  fontWeight: 700,
+                                  background: sig.bg,
+                                  border: `1px solid ${sig.border}`,
+                                  color: sig.color,
+                                  whiteSpace: 'nowrap',
+                                  letterSpacing: '0.4px',
+                                  boxShadow: sig.glow,
+                                }}>
+                                  {sig.label}
+                                </span>
+                              )
+                            })()}
                           </td>
                         </tr>
                       ))}

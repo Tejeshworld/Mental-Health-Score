@@ -8,6 +8,7 @@ import {
   FiBarChart2, FiPieChart, FiInfo, FiArrowRight,
 } from 'react-icons/fi'
 import { LuBrain, LuSparkles } from 'react-icons/lu'
+import { getSignalClassification } from '../utils/signalClassification'
 
 /* Refined studio palette for charts */
 const MINT = '#36D6A0'
@@ -252,6 +253,38 @@ export default function InsightsDashboard({ formData, score, onStartAssessment }
           }}>
             Visualizing your reported daily schedule, activity levels, and psychological equilibrium without assumptions.
           </p>
+
+          {score !== null && score !== undefined && (() => {
+            const sig = getSignalClassification(score)
+            return (
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 10,
+                marginTop: 18,
+                padding: '8px 16px',
+                borderRadius: 99,
+                background: sig.bg,
+                border: `1px solid ${sig.border}`,
+                boxShadow: sig.glow,
+              }}>
+                <span style={{ fontSize: 12, color: '#C8DBD2', fontWeight: 500 }}>
+                  Model Evaluation: <strong style={{ color: '#F4F8F5' }}>{Number(score).toFixed(2)} / 10</strong>
+                </span>
+                <span style={{
+                  padding: '2px 8px',
+                  borderRadius: 6,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  background: 'rgba(0,0,0,0.35)',
+                  color: sig.color,
+                  letterSpacing: '0.4px',
+                }}>
+                  {sig.label}
+                </span>
+              </div>
+            )
+          })()}
         </div>
 
         {/* 5 Metric cards */}
